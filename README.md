@@ -56,7 +56,8 @@ Follow steps once after successful deployment.
  <p>   For secured/ssl access : https://{public ip address or dns name}:7002/console </p>
 </p>
 
-**Adding another managed server to  running cluster domain**
+<h3> Adding another managed server to  running cluster domain </h3>
+
 **PowerShell** 
 
 *#use this command when you need to create a new resource group for your deployment*
