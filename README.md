@@ -61,20 +61,16 @@ Follow steps once after successful deployment.
 
 *#use this command when you need to create a new resource group for your deployment*
 
-*New-AzResourceGroup -Name &lt;resource-group-name&gt; -Location &lt;resource-group-location&gt; 
-
 *New-AzResourceGroupDeployment -ResourceGroupName &lt;resource-group-name&gt; -TemplateUri https://raw.githubusercontent.com/wls-eng/arm-oraclelinux-wls-cluster/master/addnodedeploy.json*
 
 **Command line**
 
 *#use this command when you need to create a new resource group for your deployment*
 
-*az group create --name &lt;resource-group-name&gt; --location &lt;resource-group-location&gt;
-
 *az group deployment create --resource-group &lt;resource-group-name&gt; --template-uri https://raw.githubusercontent.com/wls-eng/arm-oraclelinux-wls-cluster/master/addnodedeploy.json*
 
 <p>Note : </p>
- <p>1) Parameters dnsLabelPrefix, managedServerName and vmName should be unique and can follow the existing naming conventions followed with existing cluster domain setup. </p>
+ <p>1) Parameters dnsLabelPrefix, managedServerName and vmName should be unique. Better to follow the existing naming conventions as per existing cluster domain setup. </p>
  <p>2) adminURL should be supplied with {admin server public ip or dn name}:{ non ssl port} </p>
  
 
