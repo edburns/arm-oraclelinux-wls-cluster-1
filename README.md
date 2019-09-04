@@ -46,6 +46,7 @@ So, when this template is run, user will be required to accept the <a href="http
 <p>Domain setup will be available at "/u01/domains/{domain name}" on each VMs
 <p>1)Weblogic admin server will be hosted on as per user supplied for parameter adminVMName. By default name will be adminVM </p>
 <p>2)Other VMs , depending on number of instances managed servers willbe hosted in VMs with name managed server prefix and index   </p>
+
 **Accessing Admin Console**
 <p>
 Follow steps once after successful deployment.
@@ -55,7 +56,7 @@ Follow steps once after successful deployment.
  <p>   For secured/ssl access : https://{public ip address or dns name}:7002/console </p>
 </p>
 
-**Adding another managed server after successful cluster deployment**
+**Adding another managed server to  running cluster domain**
 **PowerShell** 
 
 *#use this command when you need to create a new resource group for your deployment*
