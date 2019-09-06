@@ -37,6 +37,7 @@ function installUtilities()
     attempt=1
     while [[ $attempt -lt 4 ]]
     do
+       echo "Starting rngd service attempt $attempt"
        sudo systemctl start rngd
        attempt=`expr $attempt+1`
        sudo systemctl status rngd | grep running
