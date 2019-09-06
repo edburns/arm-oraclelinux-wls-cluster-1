@@ -577,6 +577,7 @@ function enabledAndStartNodeManagerService()
   sudo systemctl daemon-reload
   echo "Starting nodemanager service"
   sudo systemctl start wls_nodemanager
+  sleep 1m
 }
 
 
