@@ -39,7 +39,7 @@ function installUtilities()
     do
        echo "Starting rngd service attempt $attempt"
        sudo systemctl start rngd
-       attempt=`expr $attempt+1`
+       attempt=`expr $attempt + 1`
        sudo systemctl status rngd | grep running
        if [[ $? == 0 ]]; 
        then
