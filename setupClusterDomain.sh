@@ -677,9 +677,21 @@ function enabledAndStartNodeManagerService()
 {
   sudo systemctl enable wls_nodemanager
   sudo systemctl daemon-reload
-  echo "Starting nodemanager service"
-  sudo systemctl start wls_nodemanager
-  sleep 1m
+  
+  attempt=1
+  while [[ $attempt -lt 4 ]]
+  do
+     echo "Starting nodemanager service attempt $attempt"
+     sudo systemctl start wls_nodemanager
+     attempt=`expr $attempt + 1`
+     sudo systemctl status wls_nodemanager | grep running
+     if [[ $? == 0 ]]; 
+     then
+         echo "wls_nodemanager service started successfully"
+	 break
+     fi
+     sleep 5m
+ done
 }
 
 function enableAndStartAdminServerService()
