@@ -679,7 +679,7 @@ function enabledAndStartNodeManagerService()
   sudo systemctl daemon-reload
   
   attempt=1
-  while [[ $attempt -lt 4 ]]
+  while [[ $attempt -lt 6 ]]
   do
      echo "Starting nodemanager service attempt $attempt"
      sudo systemctl start wls_nodemanager
@@ -690,7 +690,7 @@ function enabledAndStartNodeManagerService()
          echo "wls_nodemanager service started successfully"
 	 break
      fi
-     sleep 5m
+     sleep 3m
  done
 }
 
