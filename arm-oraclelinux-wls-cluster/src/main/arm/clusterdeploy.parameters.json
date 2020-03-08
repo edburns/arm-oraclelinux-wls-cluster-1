@@ -36,10 +36,16 @@
       "value": "GEN-UNIQUE"
     },
     "numberOfInstances": {
-      "value": "GEN-UNIQUE"    
+      "value": "GEN-UNIQUE"
     },
     "adminVMName": {
-      "value": "GEN-UNIQUE"        
+      "value": "GEN-UNIQUE"
+    },
+    "dnsNameforApplicationGateway": {
+      "value": "GEN-UNIQUE"
+    },
+    "GatewayPublicIPAddressName": {
+      "value": "GEN-UNIQUE"
     }
   }
 }
