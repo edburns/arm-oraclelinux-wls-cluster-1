@@ -20,6 +20,9 @@
     "otnAccountPassword": {
       "value": "GEN-UNIQUE"
     },
+    "portsToExpose": {
+      "value": "GEN-UNIQUE"
+    },
     "wlsDomainName": {
       "value": "GEN-UNIQUE"
     },
@@ -45,6 +48,9 @@
       "value": "GEN-UNIQUE"
     },
     "GatewayPublicIPAddressName": {
+      "value": "GEN-UNIQUE"
+    },
+    "linuxOSVersion": {
       "value": "GEN-UNIQUE"
     }
   }
