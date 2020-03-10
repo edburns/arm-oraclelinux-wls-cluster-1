@@ -400,7 +400,6 @@
 					},
 					"type": "Microsoft.Network/applicationGateways/gatewayIPConfigurations"
 				}],
-				"trustedRootCertificates": [],
 				"frontendIPConfigurations": [{
 					"name": "appGwPublicFrontendIp",
 					"type": "Microsoft.Network/applicationGateways/frontendIPConfigurations",
@@ -494,7 +493,6 @@
 					}
 
 				],
-				"urlPathMaps": [],
 				"requestRoutingRules": [{
 						"name": "HTTPRoutingRule",
 						"properties": {
@@ -546,8 +544,6 @@
 					},
 					"type": "Microsoft.Network/applicationGateways/probes"
 				}],
-				"rewriteRuleSets": [],
-				"redirectConfigurations": [],
 				"enableHttp2": false,
 				"autoscaleConfiguration": {
 					"minCapacity": 2,
@@ -559,7 +555,8 @@
 			"type": "Microsoft.Compute/virtualMachines",
 			"apiVersion": "2018-10-01",
 			"name": "[if(equals(copyIndex(),0),parameters('adminVMName'),concat(variables('managedVMPrefix'), copyIndex()))]",
-			"location": "[parameters('location')]",
+			"
+			": "[parameters('location')]",
 			"copy": {
 				"name": "virtualMachineLoop",
 				"count": "[parameters('numberOfInstances')]"
