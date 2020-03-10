@@ -177,7 +177,8 @@
     },
     "variables": {
        "keyVaultLinkedTemplateName":"appGatewayNestedTemplate.json",
-       "appGatewayKeyVaultRef" : "[resourceId(subscription().subscriptionId,  parameters('KeyVaultResourceGroup'), 'Microsoft.KeyVault/vaults', parameters('KeyVaultName'))]"
+        "subscriptionId": "[subscription().subscriptionId]",
+       "appGatewayKeyVaultRef" : "[resourceId( variables('subscriptionId'),  parameters('KeyVaultResourceGroup'), 'Microsoft.KeyVault/vaults', parameters('KeyVaultName'))]"
     },
     "resources": [
         {
