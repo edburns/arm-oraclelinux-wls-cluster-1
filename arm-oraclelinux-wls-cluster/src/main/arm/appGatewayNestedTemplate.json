@@ -285,7 +285,7 @@
 			"sku": {
 				"name": "Standard"
 			},
-			"location": "[resourceGroup().location]",
+			"location": "[parameters('location')]",
 			"properties": {
 				"publicIPAllocationMethod": "Static",
 				"dnsSettings": {
@@ -555,8 +555,7 @@
 			"type": "Microsoft.Compute/virtualMachines",
 			"apiVersion": "2018-10-01",
 			"name": "[if(equals(copyIndex(),0),parameters('adminVMName'),concat(variables('managedVMPrefix'), copyIndex()))]",
-			"
-			": "[parameters('location')]",
+			"location": "[parameters('location')]",
 			"copy": {
 				"name": "virtualMachineLoop",
 				"count": "[parameters('numberOfInstances')]"
