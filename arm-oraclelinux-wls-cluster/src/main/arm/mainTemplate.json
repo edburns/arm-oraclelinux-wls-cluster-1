@@ -176,7 +176,7 @@
         }
     },
     "variables": {
-       "keyVaultLinkedTemplateName":"appgateway_nested_template.json"
+       "keyVaultLinkedTemplateName":"appGatewayNestedTemplate.json"
     },
     "resources": [
         {
