@@ -209,6 +209,15 @@
 		"appGatewayFrontEndHTTPPort": 80,
 		"appGatewayFrontEndHTTPSPort": 443,
 		"backendPort": 8001,
+        	"backendProbeRef": "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName'),'/probes/HTTPhealthProbe')]",
+        	"frontendIPConfigurationRef": "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName','/frontendIPConfigurations/appGwPublicFrontendIp'))]",
+        	"frontendHTTPPortRef": "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName'),'/frontendPorts/http_port')]",
+        	"frontendHTTPSPortRef": "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName'),'/frontendPorts/https_port')]",
+        	"SslCertificateRef": "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName'),'/sslCertificates/appGwSslCertificate')]",
+        	"backendAddressPoolRef": "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName'),'/backendHttpSettingsCollection/myHTTPSetting')]",
+        	"backendHttpSettingsRef": "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName'),'/backendHttpSettingsCollection/myHTTPSetting')]",
+        	"httpListenerRef": "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName'),'/httpListeners/HTTPListener']",
+        	"httpsListenerRef": "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName'),'/httpListeners/HTTPSListener']",
 		"availabilitySetId": {
 			"id": "[resourceId('Microsoft.Compute/availabilitySets', variables('availabilitySetName'))]"
 		},
@@ -469,7 +478,7 @@
 						"affinityCookieName": "ApplicationGatewayAffinity",
 						"requestTimeout": 20,
 						"probe": {
-							"id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName')), '/probes/HTTPhealthProbe')]"
+							"id": "[variables('backendProbeRef')]"
 						}
 					},
 					"type": "Microsoft.Network/applicationGateways/backendHttpSettingsCollection"
@@ -478,10 +487,10 @@
 						"name": "HTTPListener",
 						"properties": {
 							"frontendIPConfiguration": {
-								"id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName')), '/frontendIPConfigurations/appGwPublicFrontendIp')]"
+								"id": "[variables('frontendIPConfigurationRef')]"
 							},
 							"frontendPort": {
-								"id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName')), '/frontendPorts/http_port')]"
+								"id": "[variables('frontendHTTPPortRef')]"
 							},
 							"protocol": "Http",
 							"requireServerNameIndication": false
@@ -492,15 +501,15 @@
 						"name": "HTTPSListener",
 						"properties": {
 							"frontendIPConfiguration": {
-								"id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName')), '/frontendIPConfigurations/appGwPublicFrontendIp')]"
+								"id": "[variables('frontendIPConfigurationRef')]"
 							},
 							"frontendPort": {
-								"id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName')), '/frontendPorts/https_port')]"
+								"id": "[variables('frontendHTTPSPortRef')]"
 							},
 							"protocol": "Https",
 							"requireServerNameIndication": false,
 							"SslCertificate": {
-								"id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName')), '/sslCertificates/appGwSslCertificate')]"
+								"id": "[variables('SslCertificateRef')]"
 							}
 						},
 						"type": "Microsoft.Network/applicationGateways/httpListeners"
@@ -513,13 +522,13 @@
 						"properties": {
 							"ruleType": "Basic",
 							"httpListener": {
-								"id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName')), '/httpListeners/HTTPListener')]"
+								"id": "[variables('httpListenerRef')]"
 							},
 							"backendAddressPool": {
-								"id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName')), '/backendAddressPools/myGatewayBackendPool')]"
+								"id": "[variables('backendAddressPoolRef')]"
 							},
 							"backendHttpSettings": {
-								"id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName')), '/backendHttpSettingsCollection/myHTTPSetting')]"
+								"id": "[variables('backendHttpSettingsRef')]"
 							}
 						},
 						"type": "Microsoft.Network/applicationGateways/requestRoutingRules"
@@ -529,13 +538,13 @@
 						"properties": {
 							"ruleType": "Basic",
 							"httpListener": {
-								"id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName')), '/httpListeners/HTTPSListener')]"
+								"id": "[variables('httpsListenerRef')]"
 							},
 							"backendAddressPool": {
-								"id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName')), '/backendAddressPools/myGatewayBackendPool')]"
+								"id": "[variables('backendAddressPoolRef')]"
 							},
 							"backendHttpSettings": {
-								"id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName')), '/backendHttpSettingsCollection/myHTTPSetting')]"
+								"id": "[variables('backendHttpSettingsRef')]"
 							}
 						},
 						"type": "Microsoft.Network/applicationGateways/requestRoutingRules"
