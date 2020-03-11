@@ -261,9 +261,8 @@
                     "KeyVaultName": {
                       "value": "[parameters('KeyVaultName')]"
                     }
-                  }
                 }
-           }
+            }
         }
     ],
     "outputs": {
