@@ -197,8 +197,8 @@
 		"SslCertificateRef": "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName'),'/sslCertificates/appGwSslCertificate')]",
 		"backendAddressPoolRef": "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName'),'/backendHttpSettingsCollection/myHTTPSetting')]",
 		"backendHttpSettingsRef": "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName'),'/backendHttpSettingsCollection/myHTTPSetting')]",
-		"httpListenerRef" : "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName'),'/httpListeners/HTTPListener']",
-		"httpsListenerRef": "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName'),'/httpListeners/HTTPSListener']",
+		"httpListenerRef" : "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName'),'/httpListeners/HTTPListener')]",
+		"httpsListenerRef": "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName'),'/httpListeners/HTTPSListener')]",
 		"linuxConfiguration": {
 			"disablePasswordAuthentication": true,
 			"ssh": {
