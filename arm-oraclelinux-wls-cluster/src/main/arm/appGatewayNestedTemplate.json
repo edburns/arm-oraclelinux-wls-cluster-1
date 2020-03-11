@@ -159,10 +159,13 @@
 		},
 		"appGatewaySSLCertificateData": {
                     "type": "string"
-                  },
-                  "appGatewaySSLCertificatePassword": {
-                    "type": "string"
-                  }
+                },
+		"appGatewaySSLCertificatePassword": {
+		    "type": "string"
+		},
+		"keyVaultName": {
+		    "type": "string"
+		}
 	},
 	"variables": {
 		"imagePublisher": "Oracle",
@@ -185,20 +188,31 @@
 		"appGatewayName": "myAppGateway",
 		"appGatewaySubnetName": "appGatewaySubnet",
 		"appGatewaySubnetPrefix": "10.0.1.0/24",
+		"probeName":"HTTPhealthProbe",
+		"frontEndIPConfigName":"appGwPublicFrontendIp",
+		"httpListenerName":"HTTPListener",
+		"httpsListenerName":"HTTPSListener",
+		"httpPortName":"http_port",
+		"httpsPortName":"https_port",
+		"appGatewayCertificateName":"appGwSslCertificate",
+		"httpSettingName":"myHTTPSetting",
 		"appGatewaySubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('appGatewaySubnetName'))]",
 		"appGatewayPublicIPRef": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('GatewayPublicIPAddressName'))]",
 		"appGatewayFrontEndHTTPPort": 80,
 		"appGatewayFrontEndHTTPSPort": 443,
 		"backendPort": 8001,
-		"backendProbeRef": "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName'),'/probes/HTTPhealthProbe')]",
-		"frontendIPConfigurationRef": "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName','/frontendIPConfigurations/appGwPublicFrontendIp'))]",
-		"frontendHTTPPortRef": "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName'),'/frontendPorts/http_port')]",
-		"frontendHTTPSPortRef": "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName'),'/frontendPorts/https_port')]",
-		"SslCertificateRef": "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName'),'/sslCertificates/appGwSslCertificate')]",
-		"backendAddressPoolRef": "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName'),'/backendHttpSettingsCollection/myHTTPSetting')]",
-		"backendHttpSettingsRef": "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName'),'/backendHttpSettingsCollection/myHTTPSetting')]",
-		"httpListenerRef" : "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName'),'/httpListeners/HTTPListener')]",
-		"httpsListenerRef": "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName'),'/httpListeners/HTTPSListener')]",
+		"backendProbeRef": "[resourceId('Microsoft.Network/applicationGateways/probes', variables('appGatewayName'),variables('probeName'))]",
+		"frontendIPConfigurationRef": "[resourceId('Microsoft.Network/applicationGateways/frontendIPConfigurations', variables('appGatewayName'),variables('frontEndIPConfigName'))]",
+		"frontendHTTPPortRef": "[resourceId('Microsoft.Network/applicationGateways/frontendPorts', variables('appGatewayName'),variables('httpPortName'))]",
+		"frontendHTTPSPortRef": "[resourceId('Microsoft.Network/applicationGateways/frontendPorts', variables('appGatewayName'),variables('httpsPortName'))]",
+		"SslCertificateRef": "[resourceId('Microsoft.Network/applicationGateways/sslCertificates', variables('appGatewayName'),variables('appGatewayCertificateName'))]",
+		"backendAddressPoolRef": "[resourceId('Microsoft.Network/applicationGateways/backendHttpSettingsCollection', variables('appGatewayName'),variables('httpSettingName'))]",
+		"backendHttpSettingsRef": "[resourceId('Microsoft.Network/applicationGateways/backendHttpSettingsCollection', variables('appGatewayName'),variables('httpSettingName'))]",
+		"httpListenerRef" : "[resourceId('Microsoft.Network/applicationGateways/httpListeners', variables('appGatewayName'),variables('httpListenerName'))]",
+		"httpsListenerRef": "[resourceId('Microsoft.Network/applicationGateways/httpListeners', variables('appGatewayName'),variables('httpsListenerName'))]",
+                "subscriptionId": "[subscription().subscriptionId]",
+                "KeyVaultResourceGroup":"[resourceGroup().name]",
+                "appGatewayKeyVaultRef" : "[resourceId( variables('subscriptionId'),  variables('KeyVaultResourceGroup'), 'Microsoft.KeyVault/vaults', parameters('KeyVaultName'))]",
 		"linuxConfiguration": {
 			"disablePasswordAuthentication": true,
 			"ssh": {
@@ -210,6 +224,22 @@
 			  ]
 			}
 		},
+                "appGatewaySSLCertificateData": {
+                    "reference": {
+                         "keyVault": {
+                              "id": "[variables('appGatewayKeyVaultRef')]"
+                         },
+                    "secretName": "myCertSecretData"
+                    }
+                },
+                "appGatewaySSLCertificatePassword": {
+                    "reference": {
+                        "keyVault": {
+                             "id": "[variables('appGatewayKeyVaultRef')]"
+		        },
+                    "secretName": "myCertSecretPassword"
+                    }
+                },
 		"subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]",
 		"networkSecurityGroupName": "[concat(parameters('dnsLabelPrefix'), '-nsg')]",
 		"networkSecurityGroupRef": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]",
@@ -380,12 +410,12 @@
 			"type": "Microsoft.Network/applicationGateways",
 			"dependsOn": [
 				"[variables('virtualNetworkName')]",
-				"[concat('Microsoft.Compute/virtualMachines/',variables('adminVMName'))]",
-				"virtualMachineLoopForMS"
+				"[concat('Microsoft.Compute/virtualMachines/',parameters('adminVMName'))]",
+				"virtualMachineLoop"
 			],
 			"apiVersion": "2019-06-01",
 			"name": "[variables('appGatewayName')]",
-			"location": "southeastasia",
+			"location": "[parameters('location')]",
 			"properties": {
 				"sku": {
 					"name": "Standard_v2",
@@ -427,8 +457,8 @@
 				"sslCertificates": [{
 					"name": "appGwSslCertificate",
 					"properties": {
-						"data": "[parameters('appGatewaySSLCertificateData')]",
-						"password": "[parameters('appGatewaySSLCertificatePassword')]"
+						"data": "[variables('appGatewaySSLCertificateData')]",
+						"password": "[variables('appGatewaySSLCertificatePassword')]"
 					}
 				}],
 				"backendAddressPools": [{
@@ -438,7 +468,7 @@
 							"name": "BackendAddresses",
 							"count": "[sub(int(parameters('numberOfInstances')),1)]",
 							"input": {
-								"fqdn": "[concat(variables('managedServerVMName'), copyIndex('BackendAddresses',1))]"
+								"fqdn": "[concat(variables('managedVMPrefix'), copyIndex('BackendAddresses',1))]"
 							}
 						}]
 					},
@@ -620,7 +650,7 @@
 				"count": "[parameters('numberOfInstances')]"
 			},
 			"dependsOn": [
-				"[concat('Microsoft.Compute/virtualMachines/',variables('adminVMName'))]",
+				"[concat('Microsoft.Compute/virtualMachines/',parameters('adminVMName'))]",
 				"virtualMachineLoop"
 			],
 			"properties": {
@@ -633,7 +663,7 @@
 						"[uri(parameters('_artifactsLocation'), concat('scripts/', variables('ScriptFileName'), parameters('_artifactsLocationSasToken')))]",
 						"[uri(parameters('_artifactsLocation'), concat('scripts/', variables('oradownScript'), parameters('_artifactsLocationSasToken')))]"
 					],
-					"commandToExecute": "[concat('sh',' ',variables('ScriptFileName'),' ',parameters('acceptOTNLicenseAgreement'),' ',parameters('otnAccountUsername'),' ',parameters('otnAccountPassword'),' ',parameters('wlsDomainName'),' ',parameters('wlsUserName'),' ',parameters('wlsPassword'),' ',if(equals(copyIndex(),0),'admin',concat(parameters('managedServerPrefix'), copyIndex())),' ',variables('adminVMName'),' ',reference(parameters('GatewayPublicIPAddressName')).dnsSettings.fqdn)]"
+					"commandToExecute": "[concat('sh',' ',variables('ScriptFileName'),' ',parameters('acceptOTNLicenseAgreement'),' ',parameters('otnAccountUsername'),' ',parameters('otnAccountPassword'),' ',parameters('wlsDomainName'),' ',parameters('wlsUserName'),' ',parameters('wlsPassword'),' ',if(equals(copyIndex(),0),'admin',concat(parameters('managedServerPrefix'), copyIndex())),' ',parameters('adminVMName'),' ',reference(parameters('GatewayPublicIPAddressName')).dnsSettings.fqdn)]"
 				}
 			}
 		}
