@@ -173,20 +173,6 @@
              "metadata":{
                 "description": "Key Vault Resouce Group Name"
             }
-        },
-        "appGatewaySSLCertificateData":{
-            "type":"string",
-            "defaultValue":"",
-            "metadata":{
-                "description": "SSL Certificate Data"
-            }
-        },
-        "appGatewaySSLCertificatePassword":{
-            "type":"string",
-            "defaultValue":"",
-            "metadata":{
-                "description": "SSL Certificate Password"
-            }
         }
     },
     "variables": {
@@ -274,21 +260,6 @@
                     },
                     "KeyVaultName": {
                       "value": "[parameters('KeyVaultName')]"
-                    },
-                    "appGatewaySSLCertificateData": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[variables('appGatewayKeyVaultRef')]"
-                            },
-                            "secretName": "myCertSecretData"
-                        }
-                    },
-                    "appGatewaySSLCertificatePassword": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[variables('appGatewayKeyVaultRef')]"
-                            },
-                        "secretName": "myCertSecretPassword"
                     }
                   }
                 }
