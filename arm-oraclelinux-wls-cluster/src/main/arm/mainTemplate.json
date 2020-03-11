@@ -166,13 +166,6 @@
              "metadata":{
                 "description": "KeyVault Name"
             }
-        },
-        "KeyVaultResourceGroup": {
-             "type":"string",
-             "defaultValue":"[resourceGroup().name]",
-             "metadata":{
-                "description": "Key Vault Resouce Group Name"
-            }
         }
     },
     "variables": {
