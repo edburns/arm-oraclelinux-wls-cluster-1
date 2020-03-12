@@ -159,6 +159,12 @@
 		},
 		"keyVaultName": {
 		    "type": "string"
+		},
+		"appGatewaySSLCertificateData": {
+		    "type": "string"
+		},
+		"appGatewaySSLCertificatePassword" : {
+		    "type": "string"
 		}
 	},
 	"variables": {
@@ -190,6 +196,7 @@
 		"httpsPortName":"https_port",
 		"appGatewayCertificateName":"appGwSslCertificate",
 		"httpSettingName":"myHTTPSetting",
+		"backendAddressPoolName":"myGatewayBackendPool",
 		"appGatewaySubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('appGatewaySubnetName'))]",
 		"appGatewayPublicIPRef": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('GatewayPublicIPAddressName'))]",
 		"appGatewayFrontEndHTTPPort": 80,
@@ -200,7 +207,7 @@
 		"frontendHTTPPortRef": "[resourceId('Microsoft.Network/applicationGateways/frontendPorts', variables('appGatewayName'),variables('httpPortName'))]",
 		"frontendHTTPSPortRef": "[resourceId('Microsoft.Network/applicationGateways/frontendPorts', variables('appGatewayName'),variables('httpsPortName'))]",
 		"SslCertificateRef": "[resourceId('Microsoft.Network/applicationGateways/sslCertificates', variables('appGatewayName'),variables('appGatewayCertificateName'))]",
-		"backendAddressPoolRef": "[resourceId('Microsoft.Network/applicationGateways/backendHttpSettingsCollection', variables('appGatewayName'),variables('httpSettingName'))]",
+		"backendAddressPoolRef": "[resourceId('Microsoft.Network/applicationGateways/backendAddressPools', variables('appGatewayName'),variables('backendAddressPoolName'))]",
 		"backendHttpSettingsRef": "[resourceId('Microsoft.Network/applicationGateways/backendHttpSettingsCollection', variables('appGatewayName'),variables('httpSettingName'))]",
 		"httpListenerRef" : "[resourceId('Microsoft.Network/applicationGateways/httpListeners', variables('appGatewayName'),variables('httpListenerName'))]",
 		"httpsListenerRef": "[resourceId('Microsoft.Network/applicationGateways/httpListeners', variables('appGatewayName'),variables('httpsListenerName'))]",
@@ -218,22 +225,6 @@
 			  ]
 			}
 		},
-                "appGatewaySSLCertificateData": {
-                    "reference": {
-                         "keyVault": {
-                              "id": "[variables('appGatewayKeyVaultRef')]"
-                         },
-                    "secretName": "myCertSecretData"
-                    }
-                },
-                "appGatewaySSLCertificatePassword": {
-                    "reference": {
-                        "keyVault": {
-                             "id": "[variables('appGatewayKeyVaultRef')]"
-		        },
-                    "secretName": "myCertSecretPassword"
-                    }
-                },
 		"subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]",
 		"networkSecurityGroupName": "[concat(parameters('dnsLabelPrefix'), '-nsg')]",
 		"networkSecurityGroupRef": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]",
@@ -437,8 +428,8 @@
 				"sslCertificates": [{
 					"name": "appGwSslCertificate",
 					"properties": {
-						"data": "[variables('appGatewaySSLCertificateData')]",
-						"password": "[variables('appGatewaySSLCertificatePassword')]"
+						"data": "[parameters('appGatewaySSLCertificateData')]",
+						"password": "[parameters('appGatewaySSLCertificatePassword')]"
 					}
 				}],
 				"backendAddressPools": [{
