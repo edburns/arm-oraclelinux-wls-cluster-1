@@ -211,9 +211,6 @@
 		"backendHttpSettingsRef": "[resourceId('Microsoft.Network/applicationGateways/backendHttpSettingsCollection', variables('appGatewayName'),variables('httpSettingName'))]",
 		"httpListenerRef" : "[resourceId('Microsoft.Network/applicationGateways/httpListeners', variables('appGatewayName'),variables('httpListenerName'))]",
 		"httpsListenerRef": "[resourceId('Microsoft.Network/applicationGateways/httpListeners', variables('appGatewayName'),variables('httpsListenerName'))]",
-                "subscriptionId": "[subscription().subscriptionId]",
-                "KeyVaultResourceGroup":"[resourceGroup().name]",
-                "appGatewayKeyVaultRef" : "[resourceId( variables('subscriptionId'),  variables('KeyVaultResourceGroup'), 'Microsoft.KeyVault/vaults', parameters('KeyVaultName'))]",
 		"linuxConfiguration": {
 			"disablePasswordAuthentication": true,
 			"ssh": {
