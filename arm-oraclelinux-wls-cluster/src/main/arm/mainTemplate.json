@@ -166,10 +166,17 @@
              "metadata":{
                 "description": "KeyVault Name"
             }
+        },
+        "appGatewaySSLCertificateData": {
+           "type": "string"
+        },
+        "appGatewaySSLCertificatePassword": {
+           "type": "string"
         }
     },
     "variables": {
-       "keyVaultLinkedTemplateName":"appGatewayNestedTemplate.json"
+       "keyVaultLinkedTemplateName":"appGatewayNestedTemplate.json",
+       "KeyVaultResourceGroup" : "[resourceGroup().name]"
     },
     "resources": [
         {
@@ -251,6 +258,23 @@
                     },
                     "KeyVaultName": {
                       "value": "[parameters('KeyVaultName')]"
+                    }
+                    ,
+                    "appGatewaySSLCertificateData": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[resourceId(subscription().subscriptionId,  variables('KeyVaultResourceGroup'), 'Microsoft.KeyVault/vaults', parameters('KeyVaultName'))]"
+                            },
+                            "secretName": "myCertSecretData"
+                        }
+                    },
+                    "appGatewaySSLCertificatePassword": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[resourceId(subscription().subscriptionId,  variables('KeyVaultResourceGroup'), 'Microsoft.KeyVault/vaults', parameters('KeyVaultName'))]"
+                            },
+                            "secretName": "myCertSecretPassword"
+                        }
                     }
                 }
             }
