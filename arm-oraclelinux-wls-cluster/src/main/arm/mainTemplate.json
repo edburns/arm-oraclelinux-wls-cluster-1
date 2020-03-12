@@ -166,12 +166,6 @@
              "metadata":{
                 "description": "KeyVault Name"
             }
-        },
-        "appGatewaySSLCertificateData": {
-           "type": "string"
-        },
-        "appGatewaySSLCertificatePassword": {
-           "type": "string"
         }
     },
     "variables": {
@@ -256,9 +250,6 @@
                     },
                     "GatewayPublicIPAddressName": {
                       "value":"[parameters('GatewayPublicIPAddressName')]"
-                    },
-                    "KeyVaultName": {
-                      "value": "[parameters('KeyVaultName')]"
                     },
                     "appGatewaySSLCertificateData": {
                         "reference": {
