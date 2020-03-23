@@ -170,7 +170,7 @@
     },
     "variables": {
        "keyVaultLinkedTemplateName":"appGatewayNestedTemplate.json",
-       "KeyVaultResourceGroup" : "[resourceGroup().name]",
+       "KeyVaultResourceGroup" : "gurursg",
        "subscriptionId": "[subscription().subscriptionId]"
     },
     "resources": [
@@ -181,7 +181,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                      "uri": "[concat(parameters('_artifactsLocation'), '/', variables('keyVaultLinkedTemplateName'))]",
+                      "uri": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/', variables('keyVaultLinkedTemplateName')))]",
                       "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
