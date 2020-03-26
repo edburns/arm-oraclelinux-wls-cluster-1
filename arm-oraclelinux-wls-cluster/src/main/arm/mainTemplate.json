@@ -160,17 +160,37 @@
                 "description": "Select appropriate VM Size as per requirement (Standard_A1, Standard_A2, Standard_A3, Standard_A4)"
             }
         },
-        "KeyVaultName": {
+        "keyVaultName": {
              "type":"string",
-             "defaultValue":"myKeyVault4Cert",
+             "defaultValue":"",
              "metadata":{
                 "description": "KeyVault Name"
             }
-        }
+        },
+        "keyVaultResourceGroup": {
+             "type":"string",
+             "defaultValue":"",
+             "metadata":{
+                "description": "Resource group name in current subscription containing the KeyVault"
+            }
+        },
+        "keyVaultSSLCertDataSecretName": {
+             "type":"string",
+             "defaultValue":"",
+             "metadata":{
+                "description": "The name of the secret in the specified KeyVault whose value is the SSL Certificate Data"
+            }
+        },
+        "keyVaultSSLCertPasswordSecretName": {
+             "type":"string",
+             "defaultValue":"",
+             "metadata":{
+                "description": "The name of the secret in the specified KeyVault whose value is the password for the corresponding SSL Certificate"
+            }
+        }        
     },
     "variables": {
        "keyVaultLinkedTemplateName":"appGatewayNestedTemplate.json",
-       "KeyVaultResourceGroup" : "gurursg",
        "subscriptionId": "[subscription().subscriptionId]"
     },
     "resources": [
@@ -268,17 +288,17 @@
                     "appGatewaySSLCertificateData": {
                         "reference": {
                             "keyVault": {
-                                "id": "[resourceId(variables('subscriptionId'),  variables('KeyVaultResourceGroup'), 'Microsoft.KeyVault/vaults', parameters('KeyVaultName'))]"
+                                "id": "[resourceId(variables('subscriptionId'),  parameters('keyVaultResourceGroup'), 'Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
                             },
-                            "secretName": "myCertSecretData"
+                            "secretName": "[parameters('keyVaultSSLCertDataSecretName')]"
                         }
                     },
                     "appGatewaySSLCertificatePassword": {
                         "reference": {
                             "keyVault": {
-                                "id": "[resourceId(variables('subscriptionId'),  variables('KeyVaultResourceGroup'), 'Microsoft.KeyVault/vaults', parameters('KeyVaultName'))]"
+                                "id": "[resourceId(variables('subscriptionId'),  parameters('keyVaultResourceGroup'), 'Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
                             },
-                            "secretName": "myCertSecretPassword"
+                            "secretName": "[parameters('keyVaultSSLCertPasswordSecretName')]"
                         }
                     }
                 }
