@@ -158,10 +158,12 @@
 			}
 		},		
 		"appGatewaySSLCertificateData": {
-		    "type": "string"
+		    "type": "string",
+                    "defaultValue": ""
 		},
 		"appGatewaySSLCertificatePassword" : {
-		    "type": "string"
+		    "type": "string",
+                    "defaultValue": ""
 		}
 	},
 	"variables": {
@@ -480,7 +482,7 @@
 							},
 							"protocol": "Https",
 							"requireServerNameIndication": false,
-							"SslCertificate": {
+							"sslCertificate": {
 								"id": "[variables('SslCertificateRef')]"
 							}
 						},
