@@ -434,7 +434,7 @@
 		    }
 	        }]
             },
-            "appGatewayProperties": "[union(variables('appGatewayNonSslProperties'), if(parameters('hasAppGatewaySSLCertificate'), variables('appGatewayHttpListenersWithSSLProperty'), variables('appGatewayHttpListenersWithoutSSLProperty')), if(parameters('hasAppGatewaySSLCertificate'), variables('appGatewaySslCertificateProperty'), json('null')))]"
+            "appGatewayProperties": "[union(variables('appGatewayNonSslProperties'), if(parameters('hasAppGatewaySSLCertificate'), variables('appGatewayHttpListenersWithSSLProperty'), variables('appGatewayHttpListenersWithoutSSLProperty')))]"
 	},
     "resources": [
 	  {
