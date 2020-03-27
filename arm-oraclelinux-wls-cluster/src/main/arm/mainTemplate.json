@@ -20,10 +20,6 @@
             "type": "string",
             "defaultValue": "[newGuid()]"
         },
-        "useKeyVault": {
-            "type": "bool",
-            "defaultValue": "[and(not(empty(parameters('keyVaultName'))),not(empty(parameters('keyVaultResourceGroup'))),not(empty(parameters('keyVaultSSLCertDataSecretName'))),not(empty(parameters('keyVaultSSLCertPasswordSecretName'))))]"
-        }, 
         "adminUsername": {
             "type": "string",
             "metadata": {
@@ -195,95 +191,7 @@
     },
     "variables": {
        "keyVaultLinkedTemplateName":"appGatewayNestedTemplate.json",
-       "subscriptionId": "[subscription().subscriptionId]",
-       "nestedParametersNonKeyVault": {
-          "_artifactsLocation": {
-               "value":"[parameters('_artifactsLocation')]"
-          },                    
-          "_artifactsLocationSasToken": {
-               "value":"[parameters('_artifactsLocationSasToken')]"
-          },
-          "guidValue": {
-               "value":"[parameters('guidValue')]"
-          },                    
-          "adminUsername": {
-            "value":"[parameters('adminUsername')]"
-          },                    
-          "authenticationType": {
-            "value":"[parameters('authenticationType')]"
-          },
-          "adminPasswordOrKey": {
-            "value":"[parameters('adminPasswordOrKey')]"
-          },
-          "dnsLabelPrefix": {
-            "value":"[parameters('dnsLabelPrefix')]"
-          },
-          "acceptOTNLicenseAgreement": {
-            "value":"[parameters('acceptOTNLicenseAgreement')]"
-          },
-          "otnAccountUsername": {
-            "value":"[parameters('otnAccountUsername')]"
-          },
-          "otnAccountPassword": {
-            "value":"[parameters('otnAccountPassword')]"
-          },
-          "portsToExpose": {
-            "value":"[parameters('portsToExpose')]"
-          },                    
-          "wlsDomainName": {
-            "value":"[parameters('wlsDomainName')]"
-          },
-          "wlsUserName": {
-            "value":"[parameters('wlsUserName')]"
-          },
-          "wlsPassword": {
-            "value":"[parameters('wlsPassword')]"
-          },
-          "managedServerPrefix":{
-            "value":"[parameters('managedServerPrefix')]"
-          },
-          "vmSizeSelect":{
-            "value":"[parameters('vmSizeSelect')]"
-          },
-          "linuxOSVersion":{
-            "value":"[parameters('linuxOSVersion')]"
-          },
-          "numberOfInstances": {
-            "value":"[parameters('numberOfInstances')]"
-          },
-          "adminVMName": {
-            "value":"[parameters('adminVMName')]"
-          },
-          "location": {
-            "value":"[parameters('location')]"
-          },
-          "dnsNameforApplicationGateway": {
-            "value":"[parameters('dnsNameforApplicationGateway')]"
-          },
-          "GatewayPublicIPAddressName": {
-            "value":"[parameters('GatewayPublicIPAddressName')]"
-          }
-       },
-       "appGatewaySSLCertificateDataJson": {
-               "reference": {
-                   "keyVault": {
-                       "id": "[resourceId(variables('subscriptionId'),  parameters('keyVaultResourceGroup'), 'Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
-                   },
-                   "secretName": "[parameters('keyVaultSSLCertDataSecretName')]"
-               }
-       },
-       "appGatewaySSLCertificatePasswordJson": {
-               "reference": {
-                   "keyVault": {
-                       "id": "[resourceId(variables('subscriptionId'),  parameters('keyVaultResourceGroup'), 'Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
-                   },
-                   "secretName": "[parameters('keyVaultSSLCertPasswordSecretName')]"
-               }
-       },
-       "nestedParametersKeyVault": {
-           "appGatewaySSLCertificateData": "[if(parameters('useKeyVault'), variables('appGatewaySSLCertificateDataJson'), json('{\"value\": \"\"}'))]",
-           "appGatewaySSLCertificatePassword": "[if(parameters('useKeyVault'), variables('appGatewaySSLCertificatePasswordJson'), json('{\"value\": \"\"}'))]"
-        }
+       "subscriptionId": "[subscription().subscriptionId]"
     },
     "resources": [
         {
@@ -310,7 +218,90 @@
                       "uri": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/', variables('keyVaultLinkedTemplateName')))]",
                       "contentVersion": "1.0.0.0"
                 },
-                "parameters": "[if(parameters('useKeyVault'), union(variables('nestedParametersNonKeyVault'), variables('nestedParametersKeyVault')), variables('nestedParametersNonKeyVault'))]"
+                "parameters": {
+                    "_artifactsLocation": {
+                         "value":"[parameters('_artifactsLocation')]"
+                    },                    
+                    "_artifactsLocationSasToken": {
+                         "value":"[parameters('_artifactsLocationSasToken')]"
+                    },
+                    "guidValue": {
+                         "value":"[parameters('guidValue')]"
+                    },                    
+                    "adminUsername": {
+                      "value":"[parameters('adminUsername')]"
+                    },                    
+                    "authenticationType": {
+                      "value":"[parameters('authenticationType')]"
+                    },
+                    "adminPasswordOrKey": {
+                      "value":"[parameters('adminPasswordOrKey')]"
+                    },
+                    "dnsLabelPrefix": {
+                      "value":"[parameters('dnsLabelPrefix')]"
+                    },
+                    "acceptOTNLicenseAgreement": {
+                      "value":"[parameters('acceptOTNLicenseAgreement')]"
+                    },
+                    "otnAccountUsername": {
+                      "value":"[parameters('otnAccountUsername')]"
+                    },
+                    "otnAccountPassword": {
+                      "value":"[parameters('otnAccountPassword')]"
+                    },
+                    "portsToExpose": {
+                      "value":"[parameters('portsToExpose')]"
+                    },                    
+                    "wlsDomainName": {
+                      "value":"[parameters('wlsDomainName')]"
+                    },
+                    "wlsUserName": {
+                      "value":"[parameters('wlsUserName')]"
+                    },
+                    "wlsPassword": {
+                      "value":"[parameters('wlsPassword')]"
+                    },
+                    "managedServerPrefix":{
+                      "value":"[parameters('managedServerPrefix')]"
+                    },
+                    "vmSizeSelect":{
+                      "value":"[parameters('vmSizeSelect')]"
+                    },
+                    "linuxOSVersion":{
+                      "value":"[parameters('linuxOSVersion')]"
+                    },
+                    "numberOfInstances": {
+                      "value":"[parameters('numberOfInstances')]"
+                    },
+                    "adminVMName": {
+                      "value":"[parameters('adminVMName')]"
+                    },
+                    "location": {
+                      "value":"[parameters('location')]"
+                    },
+                    "dnsNameforApplicationGateway": {
+                      "value":"[parameters('dnsNameforApplicationGateway')]"
+                    },
+                    "GatewayPublicIPAddressName": {
+                      "value":"[parameters('GatewayPublicIPAddressName')]"
+                    },
+                    "appGatewaySSLCertificateData": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[resourceId(variables('subscriptionId'),  parameters('keyVaultResourceGroup'), 'Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
+                            },
+                            "secretName": "[parameters('keyVaultSSLCertDataSecretName')]"
+                        }
+                    },
+                    "appGatewaySSLCertificatePassword": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[resourceId(variables('subscriptionId'),  parameters('keyVaultResourceGroup'), 'Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
+                            },
+                            "secretName": "[parameters('keyVaultSSLCertPasswordSecretName')]"
+                        }
+                    }
+                }
             }
         }
     ],
