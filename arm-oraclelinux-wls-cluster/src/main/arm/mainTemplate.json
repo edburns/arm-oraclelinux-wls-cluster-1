@@ -20,6 +20,10 @@
             "type": "string",
             "defaultValue": "[newGuid()]"
         },
+        "useKeyVault": {
+            "type": "bool",
+            "defaultValue": "[and(not(empty(parameters('keyVaultName'))),not(empty(parameters('keyVaultResourceGroup'))),not(empty(parameters('keyVaultSSLCertDataSecretName'))),not(empty(parameters('keyVaultSSLCertPasswordSecretName'))))]"
+        }, 
         "adminUsername": {
             "type": "string",
             "metadata": {
@@ -192,7 +196,7 @@
     "variables": {
        "keyVaultLinkedTemplateName":"appGatewayNestedTemplate.json",
        "subscriptionId": "[subscription().subscriptionId]",
-       "nestedParametersExceptingKeyVault": {
+       "nestedParametersNonKeyVault": {
           "_artifactsLocation": {
                "value":"[parameters('_artifactsLocation')]"
           },                    
@@ -260,23 +264,25 @@
             "value":"[parameters('GatewayPublicIPAddressName')]"
           }
        },
-       "nestedParametersIncludingKeyVault": {
-           "appGatewaySSLCertificateData": {
+       "appGatewaySSLCertificateDataJson": {
                "reference": {
                    "keyVault": {
                        "id": "[resourceId(variables('subscriptionId'),  parameters('keyVaultResourceGroup'), 'Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
                    },
                    "secretName": "[parameters('keyVaultSSLCertDataSecretName')]"
                }
-           },
-           "appGatewaySSLCertificatePassword": {
+       },
+       "appGatewaySSLCertificatePasswordJson": {
                "reference": {
                    "keyVault": {
                        "id": "[resourceId(variables('subscriptionId'),  parameters('keyVaultResourceGroup'), 'Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
                    },
                    "secretName": "[parameters('keyVaultSSLCertPasswordSecretName')]"
                }
-           }
+       },
+       "nestedParametersKeyVault": {
+           "appGatewaySSLCertificateData": "[if(parameters('useKeyVault'), variables('appGatewaySSLCertificateDataJson'), json('{\"value\": \"\"}'))]",
+           "appGatewaySSLCertificatePassword": "[if(parameters('useKeyVault'), variables('appGatewaySSLCertificatePasswordJson'), json('{\"value\": \"\"}'))]"
         }
     },
     "resources": [
@@ -304,7 +310,7 @@
                       "uri": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/', variables('keyVaultLinkedTemplateName')))]",
                       "contentVersion": "1.0.0.0"
                 },
-                "parameters": "[if(equals('a', 'a'), union(variables('nestedParametersExceptingKeyVault'), variables('nestedParametersIncludingKeyVault')), variables('nestedParametersExceptingKeyVault'))]"
+                "parameters": "[if(parameters('useKeyVault'), union(variables('nestedParametersNonKeyVault'), variables('nestedParametersKeyVault')), variables('nestedParametersNonKeyVault'))]"
             }
         }
     ],
