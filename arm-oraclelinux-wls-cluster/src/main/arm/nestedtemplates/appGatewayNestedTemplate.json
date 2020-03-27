@@ -407,21 +407,7 @@
 			    "requireServerNameIndication": false
 		        },
 		        "type": "Microsoft.Network/applicationGateways/httpListeners"
-		    },
-                    {
-                        "name": "HTTPSListener",
-                        "properties": {
-                            "frontendIPConfiguration": {
-                                "id": "[variables('frontendIPConfigurationRef')]"
-                            },
-                            "frontendPort": {
-                                "id": "[variables('frontendHTTPSPortRef')]"
-                            },
-                            "protocol": "Https",
-                            "requireServerNameIndication": false,
-                        },
-                        "type": "Microsoft.Network/applicationGateways/httpListeners"
-                    }
+		    }
                 ],
 
             },
