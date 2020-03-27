@@ -411,6 +411,58 @@
                 ],
 
             },
+            "requestRoutingRulesWithoutHttpsProperty": [
+                {
+		    "name": "HTTPRoutingRule",
+		    "properties": {
+			"ruleType": "Basic",
+			"httpListener": {
+			    "id": "[variables('httpListenerRef')]"
+			},
+			"backendAddressPool": {
+			    "id": "[variables('backendAddressPoolRef')]"
+			},
+			"backendHttpSettings": {
+			    "id": "[variables('backendHttpSettingsRef')]"
+			}
+		    },
+		    "type": "Microsoft.Network/applicationGateways/requestRoutingRules"
+		}
+            ],
+            "requestRoutingRulesWithHttpsProperty": [
+                {
+		    "name": "HTTPRoutingRule",
+		    "properties": {
+			"ruleType": "Basic",
+			"httpListener": {
+			    "id": "[variables('httpListenerRef')]"
+			},
+			"backendAddressPool": {
+			    "id": "[variables('backendAddressPoolRef')]"
+			},
+			"backendHttpSettings": {
+			    "id": "[variables('backendHttpSettingsRef')]"
+			}
+		    },
+		    "type": "Microsoft.Network/applicationGateways/requestRoutingRules"
+		},
+		{
+		    "name": "HTTPSRoutingRule",
+		    "properties": {
+			"ruleType": "Basic",
+			"httpListener": {
+			    "id": "[variables('httpsListenerRef')]"
+			},
+			"backendAddressPool": {
+			    "id": "[variables('backendAddressPoolRef')]"
+			},
+			"backendHttpSettings": {
+			    "id": "[variables('backendHttpSettingsRef')]"
+			}
+		    },
+		    "type": "Microsoft.Network/applicationGateways/requestRoutingRules"
+		}
+	    ],
             "appGatewaySslCertificateProperty": {
                 "sslCertificates": [{
 		    "name": "appGwSslCertificate",
