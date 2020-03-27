@@ -156,18 +156,18 @@
 			"metadata": {
 				"description": "Select appropriate VM Size as per requirement (Standard_A1, Standard_A2, Standard_A3, Standard_A4)"
 			}
-		},		
-		"appGatewaySSLCertificateData": {
-		    "type": "string"
 		},
-		"appGatewaySSLCertificatePassword" : {
-		    "type": "string"
+		"appGatewaySSLCertificateData": {
+			"type": "string"
+		},
+		"appGatewaySSLCertificatePassword": {
+			"type": "string"
 		}
 	},
 	"variables": {
 		"imagePublisher": "Oracle",
 		"imageOffer": "Oracle-Linux",
-		"managedVMPrefix": "[concat(parameters('managedServerPrefix'),'VM')]",		
+		"managedVMPrefix": "[concat(parameters('managedServerPrefix'),'VM')]",
 		"nicName": "_NIC",
 		"storageAccountName": "[concat(take(replace(parameters('guidValue'),'-',''),6),'olvm')]",
 		"addressPrefix": "10.0.0.0/16",
@@ -185,15 +185,15 @@
 		"appGatewayName": "myAppGateway",
 		"appGatewaySubnetName": "appGatewaySubnet",
 		"appGatewaySubnetPrefix": "10.0.1.0/24",
-		"probeName":"HTTPhealthProbe",
-		"frontEndIPConfigName":"appGwPublicFrontendIp",
-		"httpListenerName":"HTTPListener",
-		"httpsListenerName":"HTTPSListener",
-		"httpPortName":"http_port",
-		"httpsPortName":"https_port",
-		"appGatewayCertificateName":"appGwSslCertificate",
-		"httpSettingName":"myHTTPSetting",
-		"backendAddressPoolName":"myGatewayBackendPool",
+		"probeName": "HTTPhealthProbe",
+		"frontEndIPConfigName": "appGwPublicFrontendIp",
+		"httpListenerName": "HTTPListener",
+		"httpsListenerName": "HTTPSListener",
+		"httpPortName": "http_port",
+		"httpsPortName": "https_port",
+		"appGatewayCertificateName": "appGwSslCertificate",
+		"httpSettingName": "myHTTPSetting",
+		"backendAddressPoolName": "myGatewayBackendPool",
 		"appGatewaySubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('appGatewaySubnetName'))]",
 		"appGatewayPublicIPRef": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('GatewayPublicIPAddressName'))]",
 		"appGatewayFrontEndHTTPPort": 80,
@@ -206,17 +206,17 @@
 		"SslCertificateRef": "[resourceId('Microsoft.Network/applicationGateways/sslCertificates', variables('appGatewayName'),variables('appGatewayCertificateName'))]",
 		"backendAddressPoolRef": "[resourceId('Microsoft.Network/applicationGateways/backendAddressPools', variables('appGatewayName'),variables('backendAddressPoolName'))]",
 		"backendHttpSettingsRef": "[resourceId('Microsoft.Network/applicationGateways/backendHttpSettingsCollection', variables('appGatewayName'),variables('httpSettingName'))]",
-		"httpListenerRef" : "[resourceId('Microsoft.Network/applicationGateways/httpListeners', variables('appGatewayName'),variables('httpListenerName'))]",
+		"httpListenerRef": "[resourceId('Microsoft.Network/applicationGateways/httpListeners', variables('appGatewayName'),variables('httpListenerName'))]",
 		"httpsListenerRef": "[resourceId('Microsoft.Network/applicationGateways/httpListeners', variables('appGatewayName'),variables('httpsListenerName'))]",
 		"linuxConfiguration": {
 			"disablePasswordAuthentication": true,
 			"ssh": {
 				"publicKeys": [
-				{
-					"path": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
-					"keyData": "[parameters('adminPasswordOrKey')]"
-				}
-			  ]
+					{
+						"path": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
+						"keyData": "[parameters('adminPasswordOrKey')]"
+					}
+				]
 			}
 		},
 		"subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]",
@@ -224,8 +224,8 @@
 		"networkSecurityGroupRef": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]",
 		"requiredPortrange": ",65200-65535,5556"
 	},
-    "resources": [
-	  {
+	"resources": [
+		{
 			"type": "Microsoft.Network/networkSecurityGroups",
 			"apiVersion": "2019-06-01",
 			"name": "[variables('networkSecurityGroupName')]",
@@ -247,8 +247,8 @@
 					}
 				]
 			}
-	   },	
-	   {
+		},
+		{
 			"type": "Microsoft.Storage/storageAccounts",
 			"apiVersion": "2019-06-01",
 			"name": "[variables('storageAccountName')]",
@@ -319,7 +319,7 @@
 					]
 				},
 				"subnets": [
-				   {
+					{
 						"name": "[variables('subnetName')]",
 						"properties": {
 							"addressPrefix": "[variables('subnetPrefix')]",
@@ -352,11 +352,11 @@
 			"dependsOn": [
 				"[variables('virtualNetworkName')]",
 				"publicIPLoop",
-				"[parameters('GatewayPublicIPAddressName')]"				
+				"[parameters('GatewayPublicIPAddressName')]"
 			],
 			"properties": {
 				"ipConfigurations": [
-				   {
+					{
 						"name": "ipconfig1",
 						"properties": {
 							"privateIPAllocationMethod": "Dynamic",
@@ -366,9 +366,9 @@
 							"subnet": {
 								"id": "[variables('subnetRef')]"
 							}
+						}
 					}
-				}
-			  ]
+				]
 			}
 		},
 		{
@@ -386,25 +386,30 @@
 					"name": "WAF_v2",
 					"tier": "WAF_v2"
 				},
-				"gatewayIPConfigurations": [{
-					"name": "appGatewayIpConfig",
-					"properties": {
-						"subnet": {
-							"id": "[variables('appGatewaySubnetRef')]"
-						}
-					},
-					"type": "Microsoft.Network/applicationGateways/gatewayIPConfigurations"
-				}],
-				"frontendIPConfigurations": [{
-					"name": "appGwPublicFrontendIp",
-					"type": "Microsoft.Network/applicationGateways/frontendIPConfigurations",
-					"properties": {
-						"publicIPAddress": {
-							"id": "[variables('appGatewayPublicIPRef')]"
+				"gatewayIPConfigurations": [
+					{
+						"name": "appGatewayIpConfig",
+						"properties": {
+							"subnet": {
+								"id": "[variables('appGatewaySubnetRef')]"
+							}
+						},
+						"type": "Microsoft.Network/applicationGateways/gatewayIPConfigurations"
+					}
+				],
+				"frontendIPConfigurations": [
+					{
+						"name": "appGwPublicFrontendIp",
+						"type": "Microsoft.Network/applicationGateways/frontendIPConfigurations",
+						"properties": {
+							"publicIPAddress": {
+								"id": "[variables('appGatewayPublicIPRef')]"
+							}
 						}
 					}
-				}],
-				"frontendPorts": [{
+				],
+				"frontendPorts": [
+					{
 						"name": "http_port",
 						"properties": {
 							"port": "[int(variables('appGatewayFrontEndHTTPPort'))]"
@@ -419,43 +424,52 @@
 						"type": "Microsoft.Network/applicationGateways/frontendPorts"
 					}
 				],
-				"sslCertificates": [{
-					"name": "appGwSslCertificate",
-					"properties": {
-						"data": "[parameters('appGatewaySSLCertificateData')]",
-						"password": "[parameters('appGatewaySSLCertificatePassword')]"
-					}
-				}],
-				"backendAddressPools": [{
-					"name": "myGatewayBackendPool",
-					"properties": {
-						"copy": [{
-							"name": "BackendAddresses",
-							"count": "[sub(int(parameters('numberOfInstances')),1)]",
-							"input": {
-								"fqdn": "[concat(variables('managedVMPrefix'), copyIndex('BackendAddresses',1))]"
-							}
-						}]
-					},
-					"type": "Microsoft.Network/applicationGateways/backendAddressPools"
-				}],
-				"backendHttpSettingsCollection": [{
-					"name": "myHTTPSetting",
-					"properties": {
-						"provisioningState": "Succeeded",
-						"port": "[int(variables('backendPort'))]",
-						"protocol": "Http",
-						"cookieBasedAffinity": "Enabled",
-						"pickHostNameFromBackendAddress": true,
-						"affinityCookieName": "ApplicationGatewayAffinity",
-						"requestTimeout": 20,
-						"probe": {
-							"id": "[variables('backendProbeRef')]"
+				"sslCertificates": [
+					{
+						"name": "appGwSslCertificate",
+						"properties": {
+							"data": "[parameters('appGatewaySSLCertificateData')]",
+							"password": "[parameters('appGatewaySSLCertificatePassword')]"
 						}
-					},
-					"type": "Microsoft.Network/applicationGateways/backendHttpSettingsCollection"
-				}],
-				"httpListeners": [{
+					}
+				],
+				"backendAddressPools": [
+					{
+						"name": "myGatewayBackendPool",
+						"properties": {
+							"copy": [
+								{
+									"name": "BackendAddresses",
+									"count": "[sub(int(parameters('numberOfInstances')),1)]",
+									"input": {
+										"fqdn": "[concat(variables('managedVMPrefix'), copyIndex('BackendAddresses',1))]"
+									}
+								}
+							]
+						},
+						"type": "Microsoft.Network/applicationGateways/backendAddressPools"
+					}
+				],
+				"backendHttpSettingsCollection": [
+					{
+						"name": "myHTTPSetting",
+						"properties": {
+							"provisioningState": "Succeeded",
+							"port": "[int(variables('backendPort'))]",
+							"protocol": "Http",
+							"cookieBasedAffinity": "Enabled",
+							"pickHostNameFromBackendAddress": true,
+							"affinityCookieName": "ApplicationGatewayAffinity",
+							"requestTimeout": 20,
+							"probe": {
+								"id": "[variables('backendProbeRef')]"
+							}
+						},
+						"type": "Microsoft.Network/applicationGateways/backendHttpSettingsCollection"
+					}
+				],
+				"httpListeners": [
+					{
 						"name": "HTTPListener",
 						"properties": {
 							"frontendIPConfiguration": {
@@ -488,7 +502,8 @@
 					}
 
 				],
-				"requestRoutingRules": [{
+				"requestRoutingRules": [
+					{
 						"name": "HTTPRoutingRule",
 						"properties": {
 							"ruleType": "Basic",
@@ -521,24 +536,26 @@
 						"type": "Microsoft.Network/applicationGateways/requestRoutingRules"
 					}
 				],
-				"probes": [{
-					"name": "HTTPhealthProbe",
-					"properties": {
-						"protocol": "Http",
-						"path": "/weblogic/ready",
-						"interval": 30,
-						"timeout": 30,
-						"unhealthyThreshold": 3,
-						"pickHostNameFromBackendHttpSettings": true,
-						"minServers": 0,
-						"match": {
-							"statusCodes": [
-								"200-399"
-							]
-						}
-					},
-					"type": "Microsoft.Network/applicationGateways/probes"
-				}],
+				"probes": [
+					{
+						"name": "HTTPhealthProbe",
+						"properties": {
+							"protocol": "Http",
+							"path": "/weblogic/ready",
+							"interval": 30,
+							"timeout": 30,
+							"unhealthyThreshold": 3,
+							"pickHostNameFromBackendHttpSettings": true,
+							"minServers": 0,
+							"match": {
+								"statusCodes": [
+									"200-399"
+								]
+							}
+						},
+						"type": "Microsoft.Network/applicationGateways/probes"
+					}
+				],
 				"enableHttp2": false,
 				"autoscaleConfiguration": {
 					"minCapacity": 2,
@@ -583,19 +600,19 @@
 						"createOption": "FromImage"
 					},
 					"dataDisks": [
-					    {
-						    "diskSizeGB": 900,
-						    "lun": 0,
-						    "createOption": "Empty"
-					    }
-					 ]
+						{
+							"diskSizeGB": 900,
+							"lun": 0,
+							"createOption": "Empty"
+						}
+					]
 				},
 				"networkProfile": {
 					"networkInterfaces": [
-					    {
-						    "id": "[resourceId('Microsoft.Network/networkInterfaces',if(equals(copyIndex(),0),concat(parameters('adminVMName'),variables('nicName')),concat(variables('managedVMPrefix'), copyIndex(),variables('nicName'))))]"
-					    }
-					 ]
+						{
+							"id": "[resourceId('Microsoft.Network/networkInterfaces',if(equals(copyIndex(),0),concat(parameters('adminVMName'),variables('nicName')),concat(variables('managedVMPrefix'), copyIndex(),variables('nicName'))))]"
+						}
+					]
 				},
 				"diagnosticsProfile": {
 					"bootDiagnostics": {

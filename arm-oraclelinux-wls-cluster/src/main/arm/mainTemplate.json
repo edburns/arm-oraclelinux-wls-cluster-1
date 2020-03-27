@@ -161,52 +161,52 @@
             }
         },
         "keyVaultName": {
-             "type":"string",
-             "defaultValue":"",
-             "metadata":{
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
                 "description": "KeyVault Name"
             }
         },
         "keyVaultResourceGroup": {
-             "type":"string",
-             "defaultValue":"",
-             "metadata":{
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
                 "description": "Resource group name in current subscription containing the KeyVault"
             }
         },
         "keyVaultSSLCertDataSecretName": {
-             "type":"string",
-             "defaultValue":"",
-             "metadata":{
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
                 "description": "The name of the secret in the specified KeyVault whose value is the SSL Certificate Data"
             }
         },
         "keyVaultSSLCertPasswordSecretName": {
-             "type":"string",
-             "defaultValue":"",
-             "metadata":{
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
                 "description": "The name of the secret in the specified KeyVault whose value is the password for the corresponding SSL Certificate"
             }
-        }        
+        }
     },
     "variables": {
-       "keyVaultLinkedTemplateName":"appGatewayNestedTemplate.json",
-       "subscriptionId": "[subscription().subscriptionId]"
+        "keyVaultLinkedTemplateName": "appGatewayNestedTemplate.json",
+        "subscriptionId": "[subscription().subscriptionId]"
     },
     "resources": [
         {
-                "apiVersion": "2019-10-01",
-                "name": "${tracking.pid}",
-                "type": "Microsoft.Resources/deployments",
-                "properties": {
-                        "mode": "Incremental",
-                        "template": {
-                                "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-                                "contentVersion": "1.0.0.0",
-                                "resources": [
-                                ]
-                        }
+            "apiVersion": "2019-10-01",
+            "name": "${tracking.pid}",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": [
+                    ]
                 }
+            }
         },
         {
             "type": "Microsoft.Resources/deployments",
@@ -215,75 +215,75 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                      "uri": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/', variables('keyVaultLinkedTemplateName')))]",
-                      "contentVersion": "1.0.0.0"
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/', variables('keyVaultLinkedTemplateName')))]",
+                    "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
                     "_artifactsLocation": {
-                         "value":"[parameters('_artifactsLocation')]"
-                    },                    
+                        "value": "[parameters('_artifactsLocation')]"
+                    },
                     "_artifactsLocationSasToken": {
-                         "value":"[parameters('_artifactsLocationSasToken')]"
+                        "value": "[parameters('_artifactsLocationSasToken')]"
                     },
                     "guidValue": {
-                         "value":"[parameters('guidValue')]"
-                    },                    
+                        "value": "[parameters('guidValue')]"
+                    },
                     "adminUsername": {
-                      "value":"[parameters('adminUsername')]"
-                    },                    
+                        "value": "[parameters('adminUsername')]"
+                    },
                     "authenticationType": {
-                      "value":"[parameters('authenticationType')]"
+                        "value": "[parameters('authenticationType')]"
                     },
                     "adminPasswordOrKey": {
-                      "value":"[parameters('adminPasswordOrKey')]"
+                        "value": "[parameters('adminPasswordOrKey')]"
                     },
                     "dnsLabelPrefix": {
-                      "value":"[parameters('dnsLabelPrefix')]"
+                        "value": "[parameters('dnsLabelPrefix')]"
                     },
                     "acceptOTNLicenseAgreement": {
-                      "value":"[parameters('acceptOTNLicenseAgreement')]"
+                        "value": "[parameters('acceptOTNLicenseAgreement')]"
                     },
                     "otnAccountUsername": {
-                      "value":"[parameters('otnAccountUsername')]"
+                        "value": "[parameters('otnAccountUsername')]"
                     },
                     "otnAccountPassword": {
-                      "value":"[parameters('otnAccountPassword')]"
+                        "value": "[parameters('otnAccountPassword')]"
                     },
                     "portsToExpose": {
-                      "value":"[parameters('portsToExpose')]"
-                    },                    
+                        "value": "[parameters('portsToExpose')]"
+                    },
                     "wlsDomainName": {
-                      "value":"[parameters('wlsDomainName')]"
+                        "value": "[parameters('wlsDomainName')]"
                     },
                     "wlsUserName": {
-                      "value":"[parameters('wlsUserName')]"
+                        "value": "[parameters('wlsUserName')]"
                     },
                     "wlsPassword": {
-                      "value":"[parameters('wlsPassword')]"
+                        "value": "[parameters('wlsPassword')]"
                     },
-                    "managedServerPrefix":{
-                      "value":"[parameters('managedServerPrefix')]"
+                    "managedServerPrefix": {
+                        "value": "[parameters('managedServerPrefix')]"
                     },
-                    "vmSizeSelect":{
-                      "value":"[parameters('vmSizeSelect')]"
+                    "vmSizeSelect": {
+                        "value": "[parameters('vmSizeSelect')]"
                     },
-                    "linuxOSVersion":{
-                      "value":"[parameters('linuxOSVersion')]"
+                    "linuxOSVersion": {
+                        "value": "[parameters('linuxOSVersion')]"
                     },
                     "numberOfInstances": {
-                      "value":"[parameters('numberOfInstances')]"
+                        "value": "[parameters('numberOfInstances')]"
                     },
                     "adminVMName": {
-                      "value":"[parameters('adminVMName')]"
+                        "value": "[parameters('adminVMName')]"
                     },
                     "location": {
-                      "value":"[parameters('location')]"
+                        "value": "[parameters('location')]"
                     },
                     "dnsNameforApplicationGateway": {
-                      "value":"[parameters('dnsNameforApplicationGateway')]"
+                        "value": "[parameters('dnsNameforApplicationGateway')]"
                     },
                     "GatewayPublicIPAddressName": {
-                      "value":"[parameters('GatewayPublicIPAddressName')]"
+                        "value": "[parameters('GatewayPublicIPAddressName')]"
                     },
                     "appGatewaySSLCertificateData": {
                         "reference": {
