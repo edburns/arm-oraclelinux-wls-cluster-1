@@ -191,7 +191,93 @@
     },
     "variables": {
        "keyVaultLinkedTemplateName":"appGatewayNestedTemplate.json",
-       "subscriptionId": "[subscription().subscriptionId]"
+       "subscriptionId": "[subscription().subscriptionId]",
+       "nestedParametersExceptingKeyVault": {
+          "_artifactsLocation": {
+               "value":"[parameters('_artifactsLocation')]"
+          },                    
+          "_artifactsLocationSasToken": {
+               "value":"[parameters('_artifactsLocationSasToken')]"
+          },
+          "guidValue": {
+               "value":"[parameters('guidValue')]"
+          },                    
+          "adminUsername": {
+            "value":"[parameters('adminUsername')]"
+          },                    
+          "authenticationType": {
+            "value":"[parameters('authenticationType')]"
+          },
+          "adminPasswordOrKey": {
+            "value":"[parameters('adminPasswordOrKey')]"
+          },
+          "dnsLabelPrefix": {
+            "value":"[parameters('dnsLabelPrefix')]"
+          },
+          "acceptOTNLicenseAgreement": {
+            "value":"[parameters('acceptOTNLicenseAgreement')]"
+          },
+          "otnAccountUsername": {
+            "value":"[parameters('otnAccountUsername')]"
+          },
+          "otnAccountPassword": {
+            "value":"[parameters('otnAccountPassword')]"
+          },
+          "portsToExpose": {
+            "value":"[parameters('portsToExpose')]"
+          },                    
+          "wlsDomainName": {
+            "value":"[parameters('wlsDomainName')]"
+          },
+          "wlsUserName": {
+            "value":"[parameters('wlsUserName')]"
+          },
+          "wlsPassword": {
+            "value":"[parameters('wlsPassword')]"
+          },
+          "managedServerPrefix":{
+            "value":"[parameters('managedServerPrefix')]"
+          },
+          "vmSizeSelect":{
+            "value":"[parameters('vmSizeSelect')]"
+          },
+          "linuxOSVersion":{
+            "value":"[parameters('linuxOSVersion')]"
+          },
+          "numberOfInstances": {
+            "value":"[parameters('numberOfInstances')]"
+          },
+          "adminVMName": {
+            "value":"[parameters('adminVMName')]"
+          },
+          "location": {
+            "value":"[parameters('location')]"
+          },
+          "dnsNameforApplicationGateway": {
+            "value":"[parameters('dnsNameforApplicationGateway')]"
+          },
+          "GatewayPublicIPAddressName": {
+            "value":"[parameters('GatewayPublicIPAddressName')]"
+          }
+       },
+       "nestedParametersIncludingKeyVault": {
+           "appGatewaySSLCertificateData": {
+               "reference": {
+                   "keyVault": {
+                       "id": "[resourceId(variables('subscriptionId'),  parameters('keyVaultResourceGroup'), 'Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
+                   },
+                   "secretName": "[parameters('keyVaultSSLCertDataSecretName')]"
+               }
+           },
+           "appGatewaySSLCertificatePassword": {
+               "reference": {
+                   "keyVault": {
+                       "id": "[resourceId(variables('subscriptionId'),  parameters('keyVaultResourceGroup'), 'Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
+                   },
+                   "secretName": "[parameters('keyVaultSSLCertPasswordSecretName')]"
+               }
+           }
+        }
     },
     "resources": [
         {
@@ -218,90 +304,7 @@
                       "uri": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/', variables('keyVaultLinkedTemplateName')))]",
                       "contentVersion": "1.0.0.0"
                 },
-                "parameters": {
-                    "_artifactsLocation": {
-                         "value":"[parameters('_artifactsLocation')]"
-                    },                    
-                    "_artifactsLocationSasToken": {
-                         "value":"[parameters('_artifactsLocationSasToken')]"
-                    },
-                    "guidValue": {
-                         "value":"[parameters('guidValue')]"
-                    },                    
-                    "adminUsername": {
-                      "value":"[parameters('adminUsername')]"
-                    },                    
-                    "authenticationType": {
-                      "value":"[parameters('authenticationType')]"
-                    },
-                    "adminPasswordOrKey": {
-                      "value":"[parameters('adminPasswordOrKey')]"
-                    },
-                    "dnsLabelPrefix": {
-                      "value":"[parameters('dnsLabelPrefix')]"
-                    },
-                    "acceptOTNLicenseAgreement": {
-                      "value":"[parameters('acceptOTNLicenseAgreement')]"
-                    },
-                    "otnAccountUsername": {
-                      "value":"[parameters('otnAccountUsername')]"
-                    },
-                    "otnAccountPassword": {
-                      "value":"[parameters('otnAccountPassword')]"
-                    },
-                    "portsToExpose": {
-                      "value":"[parameters('portsToExpose')]"
-                    },                    
-                    "wlsDomainName": {
-                      "value":"[parameters('wlsDomainName')]"
-                    },
-                    "wlsUserName": {
-                      "value":"[parameters('wlsUserName')]"
-                    },
-                    "wlsPassword": {
-                      "value":"[parameters('wlsPassword')]"
-                    },
-                    "managedServerPrefix":{
-                      "value":"[parameters('managedServerPrefix')]"
-                    },
-                    "vmSizeSelect":{
-                      "value":"[parameters('vmSizeSelect')]"
-                    },
-                    "linuxOSVersion":{
-                      "value":"[parameters('linuxOSVersion')]"
-                    },
-                    "numberOfInstances": {
-                      "value":"[parameters('numberOfInstances')]"
-                    },
-                    "adminVMName": {
-                      "value":"[parameters('adminVMName')]"
-                    },
-                    "location": {
-                      "value":"[parameters('location')]"
-                    },
-                    "dnsNameforApplicationGateway": {
-                      "value":"[parameters('dnsNameforApplicationGateway')]"
-                    },
-                    "GatewayPublicIPAddressName": {
-                      "value":"[parameters('GatewayPublicIPAddressName')]"
-                    },
-                    "appGatewaySSLCertificateData": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[resourceId(variables('subscriptionId'),  parameters('keyVaultResourceGroup'), 'Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
-                            },
-                            "secretName": "[parameters('keyVaultSSLCertDataSecretName')]"
-                        }
-                    },
-                    "appGatewaySSLCertificatePassword": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[resourceId(variables('subscriptionId'),  parameters('keyVaultResourceGroup'), 'Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
-                            },
-                            "secretName": "[parameters('keyVaultSSLCertPasswordSecretName')]"
-                        }
-                    }
-                }
+                "parameters": "[if(equals('a', 'a'), union(variables('nestedParametersExceptingKeyVault'), variables('nestedParametersIncludingKeyVault')), variables('nestedParametersExceptingKeyVault'))]"
             }
         }
     ],
