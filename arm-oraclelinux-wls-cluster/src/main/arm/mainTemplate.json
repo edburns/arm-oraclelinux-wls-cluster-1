@@ -191,6 +191,7 @@
     },
     "variables": {
         "keyVaultLinkedTemplateName": "appGatewayNestedTemplate.json",
+        "clusterLinkedTemplateName": "clusterTemplate.json",
         "subscriptionId": "[subscription().subscriptionId]"
     },
     "resources": [
@@ -205,6 +206,29 @@
                     "contentVersion": "1.0.0.0",
                     "resources": [
                     ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "name": "clusterLinkedTemplate",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/', variables('clusterLinkedTemplateName')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "dnsLabelPrefix": {
+                        "value": "[parameters('dnsLabelPrefix')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "portsToExpose": {
+                        "value": "[parameters('portsToExpose')]"
+                    }
                 }
             }
         },
@@ -302,7 +326,10 @@
                         }
                     }
                 }
-            }
+            },
+            "dependsOn": [
+                "clusterLinkedTemplate"
+            ]
         }
     ],
     "outputs": {

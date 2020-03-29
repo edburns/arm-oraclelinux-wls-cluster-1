@@ -185,7 +185,6 @@
 		},
 		"const_managedVMPrefix": "[concat(parameters('managedServerPrefix'),'VM')]",
 		"const_publicIPAddressType": "Dynamic",
-                "const_requiredPortrange": ",65200-65535,5556",
 		"const_storageAccountType": "Standard_LRS",
 		"const_subnetPrefix": "10.0.0.0/24",
 		"const_vmSize": "[parameters('vmSizeSelect')]",
@@ -225,29 +224,6 @@
 		"ref_subnet": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('name_virtualNetwork'), variables('name_subnet'))]"
 	},
 	"resources": [
-		{
-			"type": "Microsoft.Network/networkSecurityGroups",
-			"apiVersion": "2019-06-01",
-			"name": "[variables('name_networkSecurityGroup')]",
-			"location": "[parameters('location')]",
-			"properties": {
-				"securityRules": [
-					{
-						"name": "WebLogicPorts",
-						"properties": {
-							"protocol": "TCP",
-							"sourcePortRange": "*",
-							"sourceAddressPrefix": "*",
-							"destinationAddressPrefix": "*",
-							"access": "Allow",
-							"priority": 320,
-							"direction": "Inbound",
-							"destinationPortRanges": "[split(concat(parameters('portsToExpose'),variables('const_requiredPortrange')), ',')]"
-						}
-					}
-				]
-			}
-		},
 		{
 			"type": "Microsoft.Storage/storageAccounts",
 			"apiVersion": "2019-06-01",
