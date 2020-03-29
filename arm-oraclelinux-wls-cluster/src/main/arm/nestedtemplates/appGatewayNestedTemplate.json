@@ -286,7 +286,7 @@
 			"name": "[variables('name_virtualNetwork')]",
 			"location": "[parameters('location')]",
 			"dependsOn": [
-				"[variables('ref_networkSecurityGroup')]"
+				"[parameters('gatewayPublicIPAddressName')]"
 			],
 			"properties": {
 				"addressSpace": {
