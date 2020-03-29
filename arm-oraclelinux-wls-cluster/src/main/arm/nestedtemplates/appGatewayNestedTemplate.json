@@ -314,7 +314,7 @@
 			],
 			"properties": {
 				"addressSpace": {
-					"const_addressPrefixes": [
+					"addressPrefixes": [
 						"[variables('const_addressPrefix')]"
 					]
 				},
@@ -322,7 +322,7 @@
 					{
 						"name": "[variables('name_subnet')]",
 						"properties": {
-							"const_addressPrefix": "[variables('const_subnetPrefix')]",
+							"addressPrefix": "[variables('const_subnetPrefix')]",
 							"networkSecurityGroup": {
 								"id": "[variables('ref_networkSecurityGroup')]"
 							}
@@ -581,13 +581,13 @@
 					"id": "[resourceId('Microsoft.Compute/availabilitySets',variables('name_availabilitySet'))]"
 				},
 				"hardwareProfile": {
-					"const_vmSize": "[variables('const_vmSize')]"
+					"vmSize": "[variables('const_vmSize')]"
 				},
 				"osProfile": {
 					"computerName": "[if(equals(copyIndex(),0),parameters('adminVMName'),concat(variables('const_managedVMPrefix'), copyIndex()))]",
 					"adminUsername": "[parameters('adminUsername')]",
 					"adminPassword": "[parameters('adminPasswordOrKey')]",
-					"const_linuxConfiguration": "[if(equals(parameters('authenticationType'), 'password'), json('null'), variables('const_linuxConfiguration'))]"
+					"linuxConfiguration": "[if(equals(parameters('authenticationType'), 'password'), json('null'), variables('const_linuxConfiguration'))]"
 				},
 				"storageProfile": {
 					"imageReference": {
@@ -655,7 +655,7 @@
 			"type": "string",
 			"value": "[concat('/u01/domains/', parameters('wlsDomainName'))]"
 		},
-		"name_adminHost": {
+		"adminHostName": {
 			"type": "string",
 			"value": "[reference(variables('name_outputAdminHost')).dnsSettings.fqdn]"
 		},
