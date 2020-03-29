@@ -106,7 +106,7 @@
                 "description": "DNS for ApplicationGateway"
             }
         },
-        "GatewayPublicIPAddressName": {
+        "gatewayPublicIPAddressName": {
             "type": "string",
             "defaultValue": "gatewayPublicIP",
             "metadata": {
@@ -282,8 +282,8 @@
                     "dnsNameforApplicationGateway": {
                         "value": "[parameters('dnsNameforApplicationGateway')]"
                     },
-                    "GatewayPublicIPAddressName": {
-                        "value": "[parameters('GatewayPublicIPAddressName')]"
+                    "gatewayPublicIPAddressName": {
+                        "value": "[parameters('gatewayPublicIPAddressName')]"
                     },
                     "appGatewaySSLCertificateData": {
                         "reference": {

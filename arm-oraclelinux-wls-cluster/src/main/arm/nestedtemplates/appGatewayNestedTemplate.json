@@ -104,7 +104,7 @@
 				"description": "DNS for ApplicationGateway"
 			}
 		},
-		"name_gatewayPublicIPAddress": {
+		"gatewayPublicIPAddressName": {
 			"type": "string",
 			"defaultValue": "gatewayPublicIP",
 			"metadata": {
@@ -210,7 +210,7 @@
 		"name_storageAccount": "[concat(take(replace(parameters('guidValue'),'-',''),6),'olvm')]",
 		"name_subnet": "Subnet",
 		"name_virtualNetwork": "[concat(parameters('wlsDomainName'),'_VNET')]",
-		"ref_appGatewayPublicIP": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('name_gatewayPublicIPAddress'))]",
+		"ref_appGatewayPublicIP": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('gatewayPublicIPAddressName'))]",
 		"ref_appGatewaySubnet": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('name_virtualNetwork'), variables('name_appGatewaySubnet'))]",
 		"ref_backendAddressPool": "[resourceId('Microsoft.Network/applicationGateways/backendAddressPools', variables('name_appGateway'),variables('name_backendAddressPool'))]",
 		"ref_backendHttpSettings": "[resourceId('Microsoft.Network/applicationGateways/backendHttpSettingsCollection', variables('name_appGateway'),variables('name_httpSetting'))]",
@@ -276,7 +276,7 @@
 		{
 			"type": "Microsoft.Network/publicIPAddresses",
 			"apiVersion": "2018-11-01",
-			"name": "[parameters('name_gatewayPublicIPAddress')]",
+			"name": "[parameters('gatewayPublicIPAddressName')]",
 			"sku": {
 				"name": "Standard"
 			},
@@ -352,7 +352,7 @@
 			"dependsOn": [
 				"[variables('name_virtualNetwork')]",
 				"publicIPLoop",
-				"[parameters('name_gatewayPublicIPAddress')]"
+				"[parameters('gatewayPublicIPAddressName')]"
 			],
 			"properties": {
 				"ipConfigurations": [
@@ -645,7 +645,7 @@
 						"[uri(parameters('_artifactsLocation'), concat('../scripts/', variables('name_scriptFile'), parameters('_artifactsLocationSasToken')))]",
 						"[uri(parameters('_artifactsLocation'), concat('../scripts/', variables('name_oradownScript'), parameters('_artifactsLocationSasToken')))]"
 					],
-					"commandToExecute": "[concat('sh',' ',variables('name_scriptFile'),' ',parameters('acceptOTNLicenseAgreement'),' ',parameters('otnAccountUsername'),' ',parameters('otnAccountPassword'),' ',parameters('wlsDomainName'),' ',parameters('wlsUserName'),' ',parameters('wlsPassword'),' ',if(equals(copyIndex(),0),'admin',concat(parameters('managedServerPrefix'), copyIndex())),' ',parameters('adminVMName'),' ',reference(parameters('name_gatewayPublicIPAddress')).dnsSettings.fqdn)]"
+					"commandToExecute": "[concat('sh',' ',variables('name_scriptFile'),' ',parameters('acceptOTNLicenseAgreement'),' ',parameters('otnAccountUsername'),' ',parameters('otnAccountPassword'),' ',parameters('wlsDomainName'),' ',parameters('wlsUserName'),' ',parameters('wlsPassword'),' ',if(equals(copyIndex(),0),'admin',concat(parameters('managedServerPrefix'), copyIndex())),' ',parameters('adminVMName'),' ',reference(parameters('gatewayPublicIPAddressName')).dnsSettings.fqdn)]"
 				}
 			}
 		}
@@ -669,7 +669,7 @@
 		},
 		"appGatewayURL": {
 			"type": "string",
-			"value": "[concat('http://',reference(parameters('name_gatewayPublicIPAddress')).dnsSettings.fqdn)]"
+			"value": "[concat('http://',reference(parameters('gatewayPublicIPAddressName')).dnsSettings.fqdn)]"
 		}
 	}
 }
