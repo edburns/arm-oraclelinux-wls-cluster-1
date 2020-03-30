@@ -65,7 +65,7 @@
 		},
 		"enableAppGateway": {
 			"type": "bool",
-			"defaultValue": false
+			"defaultValue": false,
 			"metadata": {
 				"description": "If true, deploy the necessary resoucres required for the App Gateway"
 			}

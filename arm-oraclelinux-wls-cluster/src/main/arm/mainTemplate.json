@@ -36,7 +36,7 @@
         },
         "enableAppGateway": {
             "type": "bool",
-            "defaultValue": false
+            "defaultValue": false,
             "metadata": {
                 "description": "If true, deploy an Azure App Gateway in front of the nodes of the cluster"
             }
