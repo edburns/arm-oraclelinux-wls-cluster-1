@@ -83,11 +83,6 @@
 	"resources": [
 		{
 			"type": "Microsoft.Network/applicationGateways",
-			"dependsOn": [
-				"[variables('name_virtualNetwork')]",
-				"[concat('Microsoft.Compute/virtualMachines/',parameters('adminVMName'))]",
-				"virtualMachineLoop"
-			],
 			"apiVersion": "2019-06-01",
 			"name": "[variables('name_appGateway')]",
 			"location": "[parameters('location')]",
