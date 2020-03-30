@@ -272,7 +272,7 @@
 	"outputs": {
 		"appGatewayURL": {
 			"type": "string",
-			"value": "[concat('http://',reference(parameters('gatewayPublicIPAddressName')).dnsSettings.fqdn)]"
+			"value": "[concat('http://',reference(variables('ref_appGatewayPublicIP')).dnsSettings.fqdn)]"
 		}
 	}
 }
