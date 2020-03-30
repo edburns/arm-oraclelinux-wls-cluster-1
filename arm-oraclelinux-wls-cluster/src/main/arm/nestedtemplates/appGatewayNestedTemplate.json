@@ -2,10 +2,30 @@
 	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
 	"contentVersion": "1.0.0.0",
 	"parameters": {
-		"wlsDomainName": {
+		"adminVMName": {
+			"type": "string",
+			"defaultValue": "adminVM",
+			"metadata": {
+				"description": "Admin Server hosting VM name."
+			}
+		},
+		"appGatewaySSLCertificateData": {
+			"type": "string"
+		},
+		"appGatewaySSLCertificatePassword": {
+			"type": "string"
+		},
+		"gatewayPublicIPAddressName": {
+			"type": "string",
+			"defaultValue": "gatewayPublicIP",
+			"metadata": {
+				"description": "Public IP Name for the Application Gateway"
+			}
+		},
+		"location": {
 			"type": "string",
 			"metadata": {
-				"description": "Provide Weblogic domain name"
+				"description": "Location for all resources."
 			}
 		},
 		"managedServerPrefix": {
@@ -13,20 +33,6 @@
 			"defaultValue": "managedServer",
 			"metadata": {
 				"description": "Provide managed server prefix names"
-			}
-		},
-		"dnsNameforApplicationGateway": {
-			"type": "string",
-			"defaultValue": "wlsclusterappgw",
-			"metadata": {
-				"description": "DNS for ApplicationGateway"
-			}
-		},
-		"gatewayPublicIPAddressName": {
-			"type": "string",
-			"defaultValue": "gatewayPublicIP",
-			"metadata": {
-				"description": "Public IP Name for the Application Gateway"
 			}
 		},
 		"numberOfInstances": {
@@ -38,24 +44,11 @@
 				"description": "Number of VMs to deploy, limit 5 since this sample is using a single storage account"
 			}
 		},
-		"adminVMName": {
-			"type": "string",
-			"defaultValue": "adminVM",
-			"metadata": {
-				"description": "Admin Server hosting VM name."
-			}
-		},
-		"location": {
+		"wlsDomainName": {
 			"type": "string",
 			"metadata": {
-				"description": "Location for all resources."
+				"description": "Provide Weblogic domain name"
 			}
-		},
-		"appGatewaySSLCertificateData": {
-			"type": "string"
-		},
-		"appGatewaySSLCertificatePassword": {
-			"type": "string"
 		}
 	},
 	"variables": {
@@ -88,21 +81,6 @@
 		"ref_sslCertificate": "[resourceId('Microsoft.Network/applicationGateways/sslCertificates', variables('name_appGateway'),variables('name_appGatewayCertificate'))]"
 	},
 	"resources": [
-		{
-			"type": "Microsoft.Network/publicIPAddresses",
-			"apiVersion": "2018-11-01",
-			"name": "[parameters('gatewayPublicIPAddressName')]",
-			"sku": {
-				"name": "Standard"
-			},
-			"location": "[parameters('location')]",
-			"properties": {
-				"publicIPAllocationMethod": "Static",
-				"dnsSettings": {
-					"domainNameLabel": "[concat(parameters('dnsNameforApplicationGateway'),'-',toLower(resourceGroup().name),'-',toLower(parameters('wlsDomainName')))]"
-				}
-			}
-		},
 		{
 			"type": "Microsoft.Network/applicationGateways",
 			"dependsOn": [
@@ -297,10 +275,6 @@
 		}
 	],
 	"outputs": {
-		"wlsDomainLocation": {
-			"type": "string",
-			"value": "[concat('/u01/domains/', parameters('wlsDomainName'))]"
-		},
 		"appGatewayURL": {
 			"type": "string",
 			"value": "[concat('http://',reference(parameters('gatewayPublicIPAddressName')).dnsSettings.fqdn)]"

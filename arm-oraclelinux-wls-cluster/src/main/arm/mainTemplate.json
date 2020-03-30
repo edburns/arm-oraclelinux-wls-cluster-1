@@ -16,25 +16,10 @@
             },
             "defaultValue": ""
         },
-        "guidValue": {
-            "type": "string",
-            "defaultValue": "[newGuid()]"
-        },
         "adminUsername": {
             "type": "string",
             "metadata": {
                 "description": "User name for the Virtual Machine."
-            }
-        },
-        "authenticationType": {
-            "type": "string",
-            "defaultValue": "password",
-            "allowedValues": [
-                "sshPublicKey",
-                "password"
-            ],
-            "metadata": {
-                "description": "Type of authentication to use on the Virtual Machine. SSH key is recommended."
             }
         },
         "adminPasswordOrKey": {
@@ -47,6 +32,13 @@
             "type": "string",
             "metadata": {
                 "description": "Do you agree to provide OTN credentials to accept OTN License Agreement? Enter Y or y to agree, else N or n"
+            }
+        },
+        "enableAppGateway": {
+            "type": "bool",
+            "defaultValue": "[bool('false')]",
+            "metadata": {
+                "description": "If true, deploy an Azure App Gateway in front of the nodes of the cluster"
             }
         },
         "otnAccountUsername": {
@@ -220,52 +212,47 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "dnsLabelPrefix": {
-                        "value": "[parameters('dnsLabelPrefix')]"
-                    },
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
-                    "portsToExpose": {
-                        "value": "[parameters('portsToExpose')]"
-                    }
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2018-05-01",
-            "name": "keyVaultLinkedAppGatewayTemplate",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/', variables('keyVaultLinkedTemplateName')))]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
                     "_artifactsLocation": {
                         "value": "[parameters('_artifactsLocation')]"
                     },
                     "_artifactsLocationSasToken": {
                         "value": "[parameters('_artifactsLocationSasToken')]"
                     },
-                    "guidValue": {
-                        "value": "[parameters('guidValue')]"
-                    },
-                    "adminUsername": {
-                        "value": "[parameters('adminUsername')]"
-                    },
-                    "authenticationType": {
-                        "value": "[parameters('authenticationType')]"
+                    "acceptOTNLicenseAgreement": {
+                        "value": "[parameters('acceptOTNLicenseAgreement')]"
                     },
                     "adminPasswordOrKey": {
                         "value": "[parameters('adminPasswordOrKey')]"
                     },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsername')]"
+                    },
+                    "adminVMName": {
+                        "value": "[parameters('adminVMName')]"
+                    },
                     "dnsLabelPrefix": {
                         "value": "[parameters('dnsLabelPrefix')]"
                     },
-                    "acceptOTNLicenseAgreement": {
-                        "value": "[parameters('acceptOTNLicenseAgreement')]"
+                    "dnsNameforApplicationGateway": {
+                        "value": "[parameters('dnsNameforApplicationGateway')]"
+                    },
+                    "enableAppGateway": {
+                        "value": "[parameters('enableAppGateway')]"
+                    },
+                    "gatewayPublicIPAddressName": {
+                        "value": "[parameters('gatewayPublicIPAddressName')]"
+                    },
+                    "linuxOSVersion": {
+                        "value": "[parameters('linuxOSVersion')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "managedServerPrefix": {
+                        "value": "[parameters('managedServerPrefix')]"
+                    },
+                    "numberOfInstances": {
+                        "value": "[parameters('numberOfInstances')]"
                     },
                     "otnAccountUsername": {
                         "value": "[parameters('otnAccountUsername')]"
@@ -276,6 +263,9 @@
                     "portsToExpose": {
                         "value": "[parameters('portsToExpose')]"
                     },
+                    "vmSizeSelect": {
+                        "value": "[parameters('vmSizeSelect')]"
+                    },
                     "wlsDomainName": {
                         "value": "[parameters('wlsDomainName')]"
                     },
@@ -284,30 +274,25 @@
                     },
                     "wlsPassword": {
                         "value": "[parameters('wlsPassword')]"
-                    },
-                    "managedServerPrefix": {
-                        "value": "[parameters('managedServerPrefix')]"
-                    },
-                    "vmSizeSelect": {
-                        "value": "[parameters('vmSizeSelect')]"
-                    },
-                    "linuxOSVersion": {
-                        "value": "[parameters('linuxOSVersion')]"
-                    },
-                    "numberOfInstances": {
-                        "value": "[parameters('numberOfInstances')]"
-                    },
+                    }
+
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "name": "keyVaultLinkedAppGatewayTemplate",
+			"condition": "[parameters('enableAppGateway')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/', variables('keyVaultLinkedTemplateName')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
                     "adminVMName": {
                         "value": "[parameters('adminVMName')]"
-                    },
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
-                    "dnsNameforApplicationGateway": {
-                        "value": "[parameters('dnsNameforApplicationGateway')]"
-                    },
-                    "gatewayPublicIPAddressName": {
-                        "value": "[parameters('gatewayPublicIPAddressName')]"
                     },
                     "appGatewaySSLCertificateData": {
                         "reference": {
@@ -324,6 +309,18 @@
                             },
                             "secretName": "[parameters('keyVaultSSLCertPasswordSecretName')]"
                         }
+                    },
+                    "gatewayPublicIPAddressName": {
+                        "value": "[parameters('gatewayPublicIPAddressName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "numberOfInstances": {
+                        "value": "[parameters('numberOfInstances')]"
+                    },
+                    "wlsDomainName": {
+                        "value": "[parameters('wlsDomainName')]"
                     }
                 }
             },

@@ -2,18 +2,6 @@
 	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
 	"contentVersion": "1.0.0.0",
 	"parameters": {
-		"adminUsername": {
-			"type": "string",
-			"metadata": {
-				"description": "User name for the Virtual Machine."
-			}
-		},
-		"adminPasswordOrKey": {
-			"type": "securestring",
-			"metadata": {
-				"description": "SSH Key or password for the Virtual Machine. SSH key is recommended."
-			}
-		},
 		"_artifactsLocation": {
 			"type": "string",
 			"metadata": {
@@ -30,6 +18,18 @@
 			"type": "string",
 			"metadata": {
 				"description": "Do you agree to provide OTN credentials to accept OTN License Agreement? Enter Y or y to agree, else N or n"
+			}
+		},
+		"adminPasswordOrKey": {
+			"type": "securestring",
+			"metadata": {
+				"description": "SSH Key or password for the Virtual Machine. SSH key is recommended."
+			}
+		},
+		"adminUsername": {
+			"type": "string",
+			"metadata": {
+				"description": "User name for the Virtual Machine."
 			}
 		},
 		"adminVMName": {
@@ -56,6 +56,20 @@
 				"description": "Unique DNS Name for the Public IP used to access the Virtual Machine."
 			}
 		},
+		"dnsNameforApplicationGateway": {
+			"type": "string",
+			"defaultValue": "wlsclusterappgw",
+			"metadata": {
+				"description": "DNS for ApplicationGateway"
+			}
+		},
+		"enableAppGateway": {
+			"type": "bool",
+			"defaultValue": "[bool('false')]",
+			"metadata": {
+				"description": "If true, deploy the necessary resoucres required for the App Gateway"
+			}
+		},
 		"gatewayPublicIPAddressName": {
 			"type": "string",
 			"defaultValue": "gatewayPublicIP",
@@ -66,18 +80,6 @@
 		"guidValue": {
 			"type": "string",
 			"defaultValue": "[newGuid()]"
-		},
-		"otnAccountUsername": {
-			"type": "string",
-			"metadata": {
-				"description": "Username for your Oracle Technology Network account"
-			}
-		},
-		"otnAccountPassword": {
-			"type": "securestring",
-			"metadata": {
-				"description": "Password for your Oracle Technology Network account"
-			}
 		},
 		"linuxOSVersion": {
 			"type": "string",
@@ -110,6 +112,18 @@
 			"maxValue": 5,
 			"metadata": {
 				"description": "Number of VMs to deploy, limit 5 since this sample is using a single storage account"
+			}
+		},
+		"otnAccountUsername": {
+			"type": "string",
+			"metadata": {
+				"description": "Username for your Oracle Technology Network account"
+			}
+		},
+		"otnAccountPassword": {
+			"type": "securestring",
+			"metadata": {
+				"description": "Password for your Oracle Technology Network account"
 			}
 		},
 		"portsToExpose": {
@@ -231,7 +245,26 @@
 		},
 		{
 			"type": "Microsoft.Network/publicIPAddresses",
-			"apiVersion": "2018-11-01",
+			"apiVersion": "2019-11-01",
+			"name": "[parameters('gatewayPublicIPAddressName')]",
+			"condition": "[parameters('enableAppGateway')]",
+			"sku": {
+				"name": "Standard"
+			},
+			"location": "[parameters('location')]",
+			"properties": {
+				"publicIPAllocationMethod": "Static",
+				"dnsSettings": {
+					"domainNameLabel": "[concat(parameters('dnsNameforApplicationGateway'),'-',toLower(resourceGroup().name),'-',toLower(parameters('wlsDomainName')))]"
+				}
+			},
+			"dependsOn": [
+				"[variables('name_storageAccount')]"
+			]
+		},
+		{
+			"type": "Microsoft.Network/publicIPAddresses",
+			"apiVersion": "2019-11-01",
 			"name": "[if(equals(copyIndex(),0),concat(parameters('adminVMName'),variables('name_publicIPAddress')),concat(variables('const_managedVMPrefix'), copyIndex(),variables('name_publicIPAddress')))]",
 			"location": "[parameters('location')]",
 			"copy": {
@@ -415,7 +448,7 @@
 						"[uri(parameters('_artifactsLocation'), concat('../scripts/', variables('name_scriptFile'), parameters('_artifactsLocationSasToken')))]",
 						"[uri(parameters('_artifactsLocation'), concat('../scripts/', variables('name_oradownScript'), parameters('_artifactsLocationSasToken')))]"
 					],
-					"commandToExecute": "[concat('sh',' ',variables('name_scriptFile'),' ',parameters('acceptOTNLicenseAgreement'),' ',parameters('otnAccountUsername'),' ',parameters('otnAccountPassword'),' ',parameters('wlsDomainName'),' ',parameters('wlsUserName'),' ',parameters('wlsPassword'),' ',if(equals(copyIndex(),0),'admin',concat(parameters('managedServerPrefix'), copyIndex())),' ',parameters('adminVMName'),' ',reference(parameters('gatewayPublicIPAddressName')).dnsSettings.fqdn)]"
+					"commandToExecute": "[concat('sh',' ',variables('name_scriptFile'),' ',parameters('acceptOTNLicenseAgreement'),' ',parameters('otnAccountUsername'),' ',parameters('otnAccountPassword'),' ',parameters('wlsDomainName'),' ',parameters('wlsUserName'),' ',parameters('wlsPassword'),' ',if(equals(copyIndex(),0),'admin',concat(parameters('managedServerPrefix'), copyIndex())),' ',parameters('adminVMName'),' ',if(parameters('enableAppGateway'), reference(parameters('gatewayPublicIPAddressName')).dnsSettings.fqdn, ''))]"
 				}
 			}
 		}
