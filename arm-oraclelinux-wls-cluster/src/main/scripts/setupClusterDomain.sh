@@ -835,7 +835,7 @@ function enableAndStartAdminServerService()
 CURR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export BASE_DIR="$(readlink -f ${CURR_DIR})"
 
-if [ $# -ne 8 ]
+if [ $# -le 8 ]
 then
     usage
 	exit 1
