@@ -156,10 +156,6 @@ function validateInput()
         echo_stderr "adminVMName is required. "
     fi
 
-    if [ -z "$AppGWHostName" ];
-    then
-        echo_stderr "Application Gateway HostName is required. "
-    fi
 }
 
 # Download JDK for WLS
@@ -461,6 +457,10 @@ topology:
            Notes: "$wlsServerName managed server"
            Cluster: "$wlsClusterName"
            Machine: "$nmHost"
+EOF
+    if [ -n "$AppGWHostName" ];
+    then
+        cat <<EOF >>$DOMAIN_PATH/managed-domain.yaml
            NetworkAccessPoint:
                T3Channel:
                    Protocol: "t3"
@@ -474,6 +474,9 @@ topology:
                    ListenPort: $channelPort
                    PublicAddress: "$AppGWHostName"
                    PublicPort: $channelPort
+EOF
+    fi
+    cat <<EOF >>$DOMAIN_PATH/managed-domain.yaml
    SecurityConfiguration:
        NodeManagerUsername: "$wlsUserName"
        NodeManagerPasswordEncrypted: "$wlsPassword"
@@ -832,7 +835,7 @@ function enableAndStartAdminServerService()
 CURR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export BASE_DIR="$(readlink -f ${CURR_DIR})"
 
-if [ $# -ne 9 ]
+if [ $# -ne 8 ]
 then
     usage
 	exit 1
