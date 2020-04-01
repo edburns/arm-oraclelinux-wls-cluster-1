@@ -270,5 +270,9 @@
 		}
 	],
 	"outputs": {
+		"appGatewayURL": {
+			"type": "string",
+			"value": "[concat('http://',reference(variables('ref_appGatewayPublicIP'), '2019-11-01').dnsSettings.fqdn)]"
+		}
 	}
 }
