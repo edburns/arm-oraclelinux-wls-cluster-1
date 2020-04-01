@@ -206,6 +206,20 @@
 	},
 	"resources": [
 		{
+			"apiVersion": "2019-10-01",
+			"name": "${cluster.cluster.start}",
+			"type": "Microsoft.Resources/deployments",
+			"properties": {
+				"mode": "Incremental",
+				"template": {
+					"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+					"contentVersion": "1.0.0.0",
+					"resources": [
+					]
+				}
+			}
+		},
+		{
 			"type": "Microsoft.Network/networkSecurityGroups",
 			"apiVersion": "2019-06-01",
 			"name": "[variables('name_networkSecurityGroup')]",
@@ -449,6 +463,20 @@
 						"[uri(parameters('_artifactsLocation'), concat('../scripts/', variables('name_oradownScript'), parameters('_artifactsLocationSasToken')))]"
 					],
 					"commandToExecute": "[concat('sh',' ',variables('name_scriptFile'),' ',parameters('acceptOTNLicenseAgreement'),' ',parameters('otnAccountUsername'),' ',parameters('otnAccountPassword'),' ',parameters('wlsDomainName'),' ',parameters('wlsUserName'),' ',parameters('wlsPassword'),' ',if(equals(copyIndex(),0),'admin',concat(parameters('managedServerPrefix'), copyIndex())),' ',parameters('adminVMName'),' ',reference(parameters('gatewayPublicIPAddressName')).dnsSettings.fqdn)]"
+				}
+			}
+		},
+		{
+			"apiVersion": "2019-10-01",
+			"name": "${cluster.cluster.end}",
+			"type": "Microsoft.Resources/deployments",
+			"properties": {
+				"mode": "Incremental",
+				"template": {
+					"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+					"contentVersion": "1.0.0.0",
+					"resources": [
+					]
 				}
 			}
 		}
