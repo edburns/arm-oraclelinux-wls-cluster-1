@@ -754,12 +754,16 @@ function create_managedSetup(){
          exit 1
     fi
 
-    echo "Creating T3 Channel on managed server $wlsServerName"
-    runuser -l oracle -c "export JAVA_HOME=$JDK_PATH/jdk1.8.0_131 ; $INSTALL_PATH/Oracle/Middleware/Oracle_Home/oracle_common/common/bin/wlst.sh $DOMAIN_PATH/create-t3-channel.py"
-    if [[ $? != 0 ]]; then
-         echo "Error : Creating T3 Channel on Managed server $wlsServerName failed"
-         exit 1
+    if [ -n "$AppGWHostName" ];
+    then
+        echo "Creating T3 Channel on managed server $wlsServerName"
+        runuser -l oracle -c "export JAVA_HOME=$JDK_PATH/jdk1.8.0_131 ; $INSTALL_PATH/Oracle/Middleware/Oracle_Home/oracle_common/common/bin/wlst.sh $DOMAIN_PATH/create-t3-channel.py"
+        if [[ $? != 0 ]]; then
+            echo "Error : Creating T3 Channel on Managed server $wlsServerName failed"
+            exit 1
+        fi
     fi
+    
 }
 
 #Install Weblogic Server using Silent Installation Templates
