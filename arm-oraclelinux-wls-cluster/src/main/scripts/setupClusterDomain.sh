@@ -537,6 +537,7 @@ EOF
 }
 
 #This function to add machine for a given managed server
+#This function must only be called if AppGWHostName is non-empty
 function createChannelPortsOnManagedServer()
 {
     echo "Creating T3 channel Port on managed server $wlsServerName"
@@ -728,7 +729,10 @@ function create_managedSetup(){
     create_managed_model
     create_machine_model
     create_ms_server_model
-    createChannelPortsOnManagedServer
+    if [ -n "$AppGWHostName" ];
+    then
+        createChannelPortsOnManagedServer
+    fi
     echo "Completed managed server model files"
     sudo chown -R $username:$groupname $DOMAIN_PATH
     runuser -l oracle -c "export JAVA_HOME=$JDK_PATH/jdk1.8.0_131 ; $DOMAIN_PATH/weblogic-deploy/bin/createDomain.sh -oracle_home $INSTALL_PATH/Oracle/Middleware/Oracle_Home -domain_parent $DOMAIN_PATH  -domain_type WLS -model_file $DOMAIN_PATH/managed-domain.yaml"
@@ -846,7 +850,7 @@ for (( i=0;i<$ELEMENTS;i++)); do
     echo "ARG[${args[${i}]}]"
 done
 
-if [ $# -le 8 ]
+if [ $# -le 7 ]
 then
     usage
 	exit 1
