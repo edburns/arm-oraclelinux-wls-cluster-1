@@ -835,6 +835,17 @@ function enableAndStartAdminServerService()
 CURR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export BASE_DIR="$(readlink -f ${CURR_DIR})"
 
+# store arguments in a special array 
+args=("$@") 
+# get number of elements 
+ELEMENTS=${#args[@]} 
+ 
+# echo each element in array  
+# for loop 
+for (( i=0;i<$ELEMENTS;i++)); do 
+    echo "ARG[${args[${i}]}]"
+done
+
 if [ $# -le 8 ]
 then
     usage
